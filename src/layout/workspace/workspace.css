@@ -42,3 +42,7 @@ main .dv-void-container {
 main .dv-tabs-and-actions-container {
   height: auto;
 }
+
+.openseadragon-canvas {
+  outline: none;
+}

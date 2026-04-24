@@ -1,20 +1,14 @@
 import { GalleryThumbnails, Library, Microscope, Puzzle, ScanEye, X } from 'lucide-react';
 import { Button } from '@/shadcn/button';
-import {
-  DockviewReact,
-  type DockviewReadyEvent,
-  type IDockviewPanelHeaderProps,
-  themeLight,
-} from 'dockview-react';
-/*
-import {
-  CanvasComposer,
+import { DockviewReact, type DockviewReadyEvent, type IDockviewPanelHeaderProps, themeLight } from 'dockview-react';
+import { 
+  Composer,
   Inspector,
   Preview,
   Reconstruction,
   SourceBrowser
-} from './workspace-views';
-*/
+} from '@/panels';
+
 
 import 'dockview-react/dist/styles/dockview.css';
 import './workspace.css';
@@ -93,13 +87,11 @@ export const Workspace = () => {
         }}
         defaultTabComponent={TabRenderer}
         components={{
-          /*
-          composer: CanvasComposer,
+          composer: Composer,
           inspector: Inspector,
           preview: Preview,
           reconstruction: Reconstruction,
           source_browser: SourceBrowser,
-          */
         }}
       />
     </main>
