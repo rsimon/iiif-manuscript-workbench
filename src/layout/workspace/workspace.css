@@ -1,0 +1,44 @@
+main .dv-dockview {
+  background-color: transparent;
+}
+
+main .dv-view-container {
+  overflow: visible;
+}
+
+main .dv-split-view-container {
+  overflow: visible !important;
+}
+
+main .dv-view {
+  box-shadow: 0 0 8px -3px rgba(0, 0, 0, 0.2);
+}
+
+main .dv-view.visible::before {
+  opacity: 0;
+}
+
+main .dv-groupview {
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  overflow: visible;
+}
+
+main .dv-tab {
+  padding: 2px 2px 2px 8px;
+  border-right: 1px solid var(--color-border);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+main .dv-void-container {
+  border-color: var(--color-border);
+  border-style: solid;
+  border-width: 0 0 1px 0;
+}
+
+main .dv-tabs-and-actions-container {
+  height: auto;
+}
