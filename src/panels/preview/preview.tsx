@@ -54,8 +54,6 @@ export const Preview = () => {
     
     if (!((canvas?.images || []).length > 0)) return;
 
-        console.log(canvas);
-
     // TODO just a hack for now
     canvas!.images.forEach((image, idx) => {
       if (image.type === 'dynamic' || image.type === 'level0') {
@@ -65,8 +63,6 @@ export const Preview = () => {
           const x = image.target.x / canvas!.width;
           const y = image.target.y / canvas!.width;
           const width = image.target.w / canvas!.width;
-
-          console.log('adding');
 
           viewer.addTiledImage({ 
             tileSource,

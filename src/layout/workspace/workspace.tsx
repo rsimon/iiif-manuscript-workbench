@@ -17,7 +17,7 @@ const TABS = {
   composer: { icon: <Puzzle className="size-4" />, title: 'Canvas Composer' },
   inspector: { icon: <Microscope className="size-4" />, title: "Inspector" },
   preview: { icon: <ScanEye className="size-4" />, title: "Preview" },
-  reconstruction: { icon: <GalleryThumbnails className="size-4" />, title: 'Source Materials' },
+  reconstruction: { icon: <GalleryThumbnails className="size-4" />, title: 'Reconstruction' },
   source_browser: { icon: <Library className="size-4"/>, title: 'Source Materials' }
 } 
 

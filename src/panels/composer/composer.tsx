@@ -9,7 +9,6 @@ export const Composer = () => {
   const elementRef = useRef<HTMLDivElement | null>(null);
 
   const project = useWorkspaceStore(state => state.project);
-  const selection = useWorkspaceStore(state => state.selection);
   const updateReconstructionCanvas = useWorkspaceStore(state => state.updateReconstructionCanvas);
   const composerActiveCanvasId = useWorkspaceStore(state => state.composerActiveCanvasId);
 
@@ -23,7 +22,9 @@ export const Composer = () => {
   const reset = useComposerState(state => state.reset);
 
   useEffect(() => {
-    if (!elementRef.current) return;
+    if (!project || !elementRef.current) return;
+
+    reset();
 
     const v = OpenSeadragon({
       element: elementRef.current,
@@ -39,24 +40,18 @@ export const Composer = () => {
 
     setViewer(v);
 
-    return () => {
-      v.destroy();
-      setViewer(undefined);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!project || !viewer) return;
-
-    reset();
-   
     if (composerActiveCanvasId) {
       const rc = (project?.reconstruction || []).find(rc => rc.id === composerActiveCanvasId);
       if (!rc) return; // Should never happen
 
       addCanvas(rc.canvas);
     }
-  }, [project, viewer, composerActiveCanvasId]);
+
+    return () => {
+      v.destroy();
+      setViewer(undefined);
+    };
+  }, [project, composerActiveCanvasId]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -71,12 +66,12 @@ export const Composer = () => {
   }, [images.map(i => i.id).join(':'), viewer]);
 
   const onSaveCanvas = () => {
-    if (!selection?.reconstructionCanvasId) return;
+    if (!composerActiveCanvasId) return;
 
     const canvas = getCanvas();
     if (!canvas) return;
 
-    updateReconstructionCanvas(selection.reconstructionCanvasId, canvas);
+    updateReconstructionCanvas(composerActiveCanvasId, canvas);
   }
 
   return (
