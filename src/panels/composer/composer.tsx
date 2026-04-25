@@ -66,9 +66,17 @@ export const Composer = (props: IDockviewPanelProps) => {
       const rc = (project?.reconstruction || []).find(rc => rc.id === composerActiveCanvasId);
       if (!rc) return; // Should never happen
 
+      // Add canvas to composer state
       addCanvas(rc.canvas);
+
+      // Update tab title
+      props.api.updateParameters({ 
+        tabTitle: `Canvas Composer [${rc.canvas.getLabel() || 'Untitled Canvas'}]`
+      });
     } else {
       reset();
+
+      props.api.updateParameters({ tabTitle: `Canvas Composer` });
     }
   }, [composerActiveCanvasId]);
 

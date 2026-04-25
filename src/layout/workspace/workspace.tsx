@@ -22,8 +22,8 @@ const TABS = {
 } 
 
 const TabRenderer = (props: IDockviewPanelHeaderProps) => {
-  // @ts-ignore
-  const { icon, title } = TABS[props.api.id];
+  const { icon, title: defaultTitle} = TABS[props.api.id as keyof typeof TABS];
+  const title = props.api.getParameters()?.tabTitle || defaultTitle;
 
   return (
     <div className="flex gap-2 items-center">
