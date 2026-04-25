@@ -134,6 +134,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   reset: () => set(() => ({
     images: [],
+    canvasWidth: 0,
+    canvasHeight: 0,
     hoveredId: null,
     selectedId: null
   }))

@@ -62,6 +62,8 @@ export const Composer = (props: IDockviewPanelProps) => {
   }, []);
 
   useEffect(() => {
+    reset();
+
     if (composerActiveCanvasId) {
       const rc = (project?.reconstruction || []).find(rc => rc.id === composerActiveCanvasId);
       if (!rc) return; // Should never happen
@@ -73,9 +75,9 @@ export const Composer = (props: IDockviewPanelProps) => {
       props.api.updateParameters({ 
         tabTitle: `Canvas Composer [${rc.canvas.getLabel() || 'Untitled Canvas'}]`
       });
-    } else {
-      reset();
 
+      props.api.setActive();
+    } else {
       props.api.updateParameters({ tabTitle: `Canvas Composer` });
     }
   }, [composerActiveCanvasId]);
