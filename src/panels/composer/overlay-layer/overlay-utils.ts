@@ -4,11 +4,7 @@ import type { DraggableImage } from '../composer-types';
 export const resolveId = (
   images: DraggableImage[],
   imageOrId?: TiledImage | string | null
-): string | null => {
-  console.log('resolving against');
-  console.log(imageOrId);
-  console.log(images);
-  
+): string | null => {  
   if (!imageOrId) return null;
   if (typeof imageOrId === 'string') return imageOrId;
 

@@ -109,6 +109,26 @@ export const Composer = (props: IDockviewPanelProps) => {
     }
   }, [images.map(i => i.id).join(':')]);
 
+  useEffect(() => {
+    const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
+      if (isVisible && viewerRef.current) {
+        // OSD doesn't properly react to tab visibility changes. This may
+        // cause it to operate on a stale (0x0px) viewer element. Forcing
+        // a resize to the correct viewer element size after visibility change 
+        // seems to resolve this. 
+        const newSize = new OpenSeadragon.Point(
+          containerRef.current?.clientWidth,
+          containerRef.current?.clientHeight
+        );
+
+        viewerRef.current.viewport.resize(newSize, true); 
+        viewerRef.current.viewport.update(); 
+      }
+    });
+
+    return () => dispose();
+  }, []);
+
   const onSaveCanvas = () => {
     if (!composerActiveCanvasId) return;
 
