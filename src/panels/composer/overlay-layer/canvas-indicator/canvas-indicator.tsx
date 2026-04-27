@@ -18,8 +18,7 @@ export const CanvasIndicator = () => {
       strokeWidth={1.5}
       strokeOpacity={0.25}
       vectorEffect="non-scaling-stroke"
-      pointerEvents="none"
-    />
+      pointerEvents="none" />
   )
 
 }

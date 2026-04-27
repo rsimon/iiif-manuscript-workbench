@@ -157,8 +157,6 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
           } as unknown as CozyCanvas),
           order
         };
-
-        console.log('adding empty canvas', canvas);
         
         set({
           project: {
