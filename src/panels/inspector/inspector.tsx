@@ -13,7 +13,13 @@ export const Inspector = () => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      {!selection ? (
+      {isSourceCanvasSelection ? (
+        <div className="flex-1 overflow-auto">
+          <SourceCanvasInspector 
+            canvasId={selection!.sourceCanvasId!} 
+            manifestId={selection!.manifestId!} />
+        </div>
+      ) : (
         <div className="flex flex-1 items-center justify-center p-4">
           <div className="text-center flex flex-col gap-3">
             <Microscope className="mx-auto size-8 text-neutral-300" strokeWidth={1.5} />
@@ -22,14 +28,6 @@ export const Inspector = () => {
             </p>
           </div>
         </div>
-      ) : isSourceCanvasSelection ? (
-        <div className="flex-1 overflow-auto">
-          <SourceCanvasInspector 
-            canvasId={selection.sourceCanvasId!} 
-            manifestId={selection.manifestId!} />
-        </div>
-      ) : (
-        <div className="flex-1"></div>
       )}
     </div>
   )

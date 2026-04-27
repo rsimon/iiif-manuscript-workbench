@@ -1,6 +1,7 @@
 import { useEffect, useRef} from 'react';
 import type { IDockviewPanelProps } from 'dockview-react';
 import OpenSeadragon, { type Viewer } from 'openseadragon';
+import { Puzzle } from 'lucide-react';
 import { useWorkspaceStore } from '@/store';
 import { useComposerState } from './composer-state';
 import { OverlayLayer } from './overlay-layer';
@@ -157,13 +158,24 @@ export const Composer = (props: IDockviewPanelProps) => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="relative flex-1">
-        <div ref={containerRef} className="size-full bg-neutral-50 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] bg-size-[16px_16px]">
-          <OverlayLayer viewer={viewer} />
-        </div>
+      {composerActiveCanvasId ? (
+        <div className="relative flex-1">
+          <div ref={containerRef} className="size-full bg-neutral-50 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] bg-size-[16px_16px]">
+            <OverlayLayer viewer={viewer} />
+          </div>
 
-        <Toolbar onSave={onSaveCanvas} />
-      </div>
+          <Toolbar onSave={onSaveCanvas} />
+        </div>
+      ) : (
+        <div className="flex flex-1 items-center justify-center p-4">
+          <div className="text-center flex flex-col gap-3">
+            <Puzzle className="mx-auto size-8 text-neutral-300" strokeWidth={1.5} />
+            <p className="text-sm max-w-xs leading-relaxed text-muted-foreground/65">
+              Double-click a canvas in the Reconstruction to open it in the Composer
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   )
 
