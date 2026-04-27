@@ -87,6 +87,8 @@ export const Composer = (props: IDockviewPanelProps) => {
     const renderImages = () => {
       if (!viewerRef.current) return;
       const viewer = viewerRef.current;
+      
+      viewer.world.removeAll();
 
       Promise.all(images.map(i => {
         if (typeof i.tileSource === 'string') {
@@ -106,8 +108,6 @@ export const Composer = (props: IDockviewPanelProps) => {
           })
         }
       })).then(resolvedSources => {
-        viewer.world.removeAll();
-
         console.log(resolvedSources);
 
         resolvedSources.forEach(i => viewer.addTiledImage(i));
