@@ -83,9 +83,27 @@ export const Composer = (props: IDockviewPanelProps) => {
   }, [composerActiveCanvasId]);
 
   useEffect(() => {
+    let cancelled = false;
+
     const renderImages = () => {
       if (!viewerRef.current) return;
       const viewer = viewerRef.current;
+
+      if (images.length === 0) {
+        viewer.world.removeAll(); 
+        viewer.addTiledImage({
+          tileSource: {
+            type: 'legacy-image-pyramid',
+            levels: [{
+              url: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', // 1x1 transparent GIF
+              width: 2000,
+              height: 2000
+            }]
+          },
+          opacity: 0,
+        });
+        return;
+      }
 
       Promise.all(images.map(i => {
         if (typeof i.tileSource === 'string') {
@@ -105,7 +123,8 @@ export const Composer = (props: IDockviewPanelProps) => {
           })
         }
       })).then(resolvedSources => {
-        console.log('rendering', resolvedSources.length, 'images');
+        if (cancelled) return; // discard stale result
+
         viewer.world.removeAll();
         resolvedSources.forEach(i => viewer.addTiledImage(i));
       }).catch(error => {
@@ -118,14 +137,15 @@ export const Composer = (props: IDockviewPanelProps) => {
     }
 
     // Otherwise, init when tab first opens
-    // const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
-    //   if (isVisible) renderImages();
-    // });
+    const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
+      if (isVisible) renderImages();
+    });
 
     return () => {
-     // dispose();
+      cancelled = true;
+      dispose();
     }
-  }, [images.map(i => i.id).join(':'), props.api]);
+  }, [images.length === 0 ? 'empty' : images.map(i => i.id).join(':'), props.api]);
 
   useEffect(() => {
     const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
