@@ -21,7 +21,7 @@ export interface ComposerState {
 
   setViewer(viewer?: Viewer): void;
 
-  addCanvas(canvas: CozyCanvas): void;
+  addCanvas(canvas: CozyCanvas, clearOthers?: boolean): void;
 
   setHoveredId(id?: string | null): void;
 
@@ -51,7 +51,7 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   setViewer: (viewer?: Viewer) => set({ viewer }),
 
-  addCanvas: canvas => {
+  addCanvas: (canvas, clearOthers) => {
     const { images } = get();
     
     const toAdd: DraggableImage[] = canvas.images.map((image, idx) => {
@@ -73,12 +73,12 @@ export const useComposerState = create<ComposerState>((set, get) => ({
       }
     });
 
-    if (images.length === 0) {
+    if (images.length === 0 || clearOthers) {
       // Initialize canvas dimensions with the size of this canvas
       set(state => ({
         canvasWidth: canvas.width,
         canvasHeight: canvas.height,
-        images: [...state.images, ...toAdd]
+        images: clearOthers ? toAdd : [...state.images, ...toAdd]
       }));
     } else {
       set(state => ({

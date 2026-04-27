@@ -63,14 +63,13 @@ export const Composer = (props: IDockviewPanelProps) => {
   }, []);
 
   useEffect(() => {
-    reset();
 
     if (composerActiveCanvasId) {
       const rc = (project?.reconstruction || []).find(rc => rc.id === composerActiveCanvasId);
       if (!rc) return; // Should never happen
 
       // Add canvas to composer state
-      addCanvas(rc.canvas);
+      addCanvas(rc.canvas, true);
 
       // Update tab title
       props.api.updateParameters({ 
@@ -79,6 +78,7 @@ export const Composer = (props: IDockviewPanelProps) => {
 
       props.api.setActive();
     } else {
+      reset();
       props.api.updateParameters({ tabTitle: `Canvas Composer` });
     }
   }, [composerActiveCanvasId]);
@@ -87,8 +87,6 @@ export const Composer = (props: IDockviewPanelProps) => {
     const renderImages = () => {
       if (!viewerRef.current) return;
       const viewer = viewerRef.current;
-      
-      viewer.world.removeAll();
 
       Promise.all(images.map(i => {
         if (typeof i.tileSource === 'string') {
@@ -108,8 +106,7 @@ export const Composer = (props: IDockviewPanelProps) => {
           })
         }
       })).then(resolvedSources => {
-        console.log(resolvedSources);
-
+        viewer.world.removeAll();
         resolvedSources.forEach(i => viewer.addTiledImage(i));
       });
     }
