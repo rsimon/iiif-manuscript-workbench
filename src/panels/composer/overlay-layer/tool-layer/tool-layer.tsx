@@ -17,10 +17,11 @@ export const ToolLayer = (props: ToolLayerProps) => {
 
   useEffect(() => {
     const onCanvasClick = (event: CanvasClickEvent) => {
+      if (!event.quick) return; // Ignore drag
       const hit = getImageAt(viewer, event.position);
       setSelected(hit);
     }
-
+    
     viewer.addHandler('canvas-click', onCanvasClick);
 
     return () => {
