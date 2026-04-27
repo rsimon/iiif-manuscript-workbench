@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { Cozy, type CozyCanvas, type CozyManifest } from 'cozy-iiif';
 import { hydrateCanvas } from 'cozy-iiif/helpers';
-import type { Project, Selection, SourceManifest } from '@/types';
+import type { Project, ReconstructionCanvas, Selection, SourceManifest } from '@/types';
 
 interface WorkspaceStore {
   
@@ -29,6 +29,7 @@ interface WorkspaceStore {
    * Actions: reconstruction
    */
   addCanvasToReconstruction: (sourceManifestId: string, canvas: CozyCanvas) => void;
+  createEmptyCanvas: (width?: number, height?: number) => void;
   removeCanvasFromReconstruction: (canvasId: string) => void;
   reorderReconstruction: (activeId: string, overId: string) => void;
   resetReconstruction: () => void;
@@ -129,6 +130,37 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
             ...project,
             reconstruction: [...project.reconstruction, reconstructionCanvas]
           },
+        });
+      },
+  
+      createEmptyCanvas: (width = 1000, height = 1000) => {
+        const { project } = get();
+        if (!project) return;
+        
+        const order = project.reconstruction.length;
+
+        const id = crypto.randomUUID();
+
+        const canvas: ReconstructionCanvas = {
+          id, 
+          canvas: hydrateCanvas({
+            id,
+            width,
+            height,
+            images: [],
+            source: {
+              id,
+              type: 'Canvas'
+            }
+          } as unknown as CozyCanvas),
+          order
+        };
+        
+        set({
+          project: {
+            ...project,
+            reconstruction: [...project.reconstruction, canvas]
+          }
         });
       },
 

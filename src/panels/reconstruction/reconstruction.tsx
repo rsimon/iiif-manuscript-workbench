@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Layers, Plus, Trash2 } from 'lucide-react';
+import { FilePlus, Layers, Plus, Trash2 } from 'lucide-react';
 import { PanelActionButton } from '@/components/panel-action-button';
 import { useWorkspaceStore } from '@/store';
 import { ScrollArea, ScrollBar } from '@/shadcn/scroll-area';
@@ -24,12 +24,13 @@ import {
 export const Reconstruction = () => {
   const { 
     project, 
-    reorderReconstruction, 
     selection,
-    setSelection,
     addCanvasToReconstruction,
+    createEmptyCanvas,
     removeCanvasFromReconstruction,
-    resetReconstruction
+    reorderReconstruction, 
+    resetReconstruction,
+    setSelection
   } = useWorkspaceStore();
 
   const [draggedId, setDraggedId] = useState<string | null>(null);
@@ -92,6 +93,12 @@ export const Reconstruction = () => {
   return project ? (
     <div className="flex h-full w-full flex-col">
       <div className="shrink-0 border-b p-0.5 flex justify-end">
+        <PanelActionButton
+          tooltip="Create empty canvas"
+          onClick={() => createEmptyCanvas()}>
+          <FilePlus className="siz-4" />
+        </PanelActionButton>
+
         <PanelActionButton
           disabled={project.reconstruction.length === 0}
           tooltip="Reset reconstruction"
