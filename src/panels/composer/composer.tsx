@@ -86,14 +86,31 @@ export const Composer = (props: IDockviewPanelProps) => {
     const renderImages = () => {
       if (!viewerRef.current) return;
       const viewer = viewerRef.current;
-      
-      viewer.world.removeAll();
 
-      // Warning: OSD mutates TiledImages in place - do a simple 'deep clone' 
-      images.forEach(i => viewer.addTiledImage({
-        ...i, 
-        tileSource: typeof i.tileSource === 'string' ? i.tileSource : {...i.tileSource }
-      }));
+      Promise.all(images.map(i => {
+        if (typeof i.tileSource === 'string') {
+          // Warning, providing a IIIF info.json string sometimes leads to stale rendering,
+          // if info.json loads too slow: OSD doesn't render the image until some other user
+          // action forces an update - zoom, pan, resize. Therefore, resolve the info.json
+          // manually instead, and then pass the JSON to OSD!
+          return fetch(i.tileSource).then(res => res.json()).then(tileSource => ({ 
+            ...i,
+            tileSource 
+          }));
+        } else {
+          // Warning: OSD mutates TiledImages in place - do a simple 'deep clone' 
+          return Promise.resolve({
+            ...i,
+            tileSource: {...i.tileSource }
+          })
+        }
+      })).then(resolvedSources => {
+        viewer.world.removeAll();
+
+        console.log(resolvedSources);
+
+        resolvedSources.forEach(i => viewer.addTiledImage(i));
+      });
     }
 
     if (props.api.isVisible)
