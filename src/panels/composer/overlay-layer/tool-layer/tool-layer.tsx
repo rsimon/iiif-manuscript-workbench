@@ -29,12 +29,6 @@ export const ToolLayer = (props: ToolLayerProps) => {
     };
   }, [viewer]);
 
-  useEffect(() => {
-    if (selected) {
-      // viewer.setMouseNavEnabled()
-    }
-  }, [viewer, selected]);
-
   return selected ? (
     <ToolWidget 
       selected={selected} 

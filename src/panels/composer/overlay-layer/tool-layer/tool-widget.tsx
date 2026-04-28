@@ -119,6 +119,8 @@ export const ToolWidget = (props: ToolWidgetProps) => {
   const onPointerDown = (evt: React.PointerEvent) => {
     const target = evt.target as Element;
     target.setPointerCapture(evt.pointerId);
+    
+    console.log('down', evt.pointerId);
 
     const pt = viewport.pointFromPixel(new Point(evt.clientX, evt.clientY));
     setOrigin(pt);
@@ -145,6 +147,12 @@ export const ToolWidget = (props: ToolWidgetProps) => {
     setInitialBounds(props.selected.osdImage.getBounds());
   }
 
+  const onPointerCancel = () => {
+    // Capture is auto-released by the browser on cancel
+    setOrigin(undefined);
+    setInitialBounds(props.selected.osdImage.getBounds());
+  }
+
   return (
     <g>
       <polygon
@@ -156,7 +164,8 @@ export const ToolWidget = (props: ToolWidgetProps) => {
         vectorEffect="non-scaling-stroke"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove('SHAPE')}
-        onPointerUp={onPointerUp} />
+        onPointerUp={onPointerUp} 
+        onPointerCancel={onPointerCancel} />
 
       <polygon
         className="cursor-grab"
@@ -168,7 +177,8 @@ export const ToolWidget = (props: ToolWidgetProps) => {
         strokeDasharray="5 2" 
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove('SHAPE')}
-        onPointerUp={onPointerUp} />
+        onPointerUp={onPointerUp} 
+        onPointerCancel={onPointerCancel} />
 
       {corners.map((corner, i) => (
         <ToolCornerHandle 
@@ -184,7 +194,8 @@ export const ToolWidget = (props: ToolWidgetProps) => {
           viewer={props.viewer} 
           onPointerDown={onPointerDown} 
           onPointerMove={onPointerMove(HANDLE_TYPES[i])}
-          onPointerUp={onPointerUp} />
+          onPointerUp={onPointerUp} 
+          onPointerCancel={onPointerCancel} />
       ))}
     </g>
   )

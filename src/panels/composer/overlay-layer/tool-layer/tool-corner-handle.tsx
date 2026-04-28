@@ -22,6 +22,8 @@ interface ToolCornerHandleProps {
 
   onPointerUp: React.PointerEventHandler<SVGElement>;
 
+  onPointerCancel: React.PointerEventHandler<SVGElement>;
+
 }
 
 export const ToolCornerHandle = (props: ToolCornerHandleProps) => {
@@ -66,7 +68,8 @@ export const ToolCornerHandle = (props: ToolCornerHandleProps) => {
       vectorEffect="non-scaling-stroke"
       onPointerDown={props.onPointerDown} 
       onPointerMove={props.onPointerMove} 
-      onPointerUp={props.onPointerUp} />
+      onPointerUp={props.onPointerUp} 
+      onPointerCancel={props.onPointerCancel} />
   )
 
 }
