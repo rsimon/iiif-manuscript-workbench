@@ -179,7 +179,9 @@ export const Composer = (props: IDockviewPanelProps) => {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="relative flex-1">
-        <div ref={containerRef} className="size-full bg-neutral-50 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] bg-size-[16px_16px]">
+        <div 
+          ref={containerRef} 
+          className="size-full bg-neutral-100 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] bg-size-[16px_16px] [&>.openseadragon-container]:z-10">
           <OverlayLayer viewer={viewer} />
         </div>
 

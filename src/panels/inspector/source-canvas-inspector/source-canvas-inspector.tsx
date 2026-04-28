@@ -5,6 +5,7 @@ import { ScrollArea } from '@/shadcn/scroll-area';
 import { Separator } from '@/shadcn/separator';
 import { useWorkspaceStore } from '@/store';
 import { MetadataField } from '../metadata-field';
+import { useComposerState } from '@/panels/composer';
 
 interface SourceCanvasInspectorProps {
 
@@ -16,8 +17,11 @@ interface SourceCanvasInspectorProps {
 
 export const SourceCanvasInspector = (props: SourceCanvasInspectorProps) => {
   const project = useWorkspaceStore(state => state.project);
+  const isComposerOpen = useWorkspaceStore(state => Boolean(state.composerActiveCanvasId));
   const addCanvasToReconstruction = useWorkspaceStore(state => state.addCanvasToReconstruction);
 
+  const addCanvas = useComposerState(state => state.addCanvas);
+  
   const { canvas, manifest } = useMemo(() => {
     if (!project) return { canvas: undefined, manifest: undefined };
 
@@ -27,8 +31,6 @@ export const SourceCanvasInspector = (props: SourceCanvasInspectorProps) => {
     const canvas = source.manifest.canvases.find(c => c.id === props.canvasId);
     return { canvas, manifest: source.manifest };
   }, [props.canvasId, props.manifestId, project]);
-
-  if (!canvas || !manifest) return;
 
   return (canvas && manifest) ? (
     <div className="flex h-full flex-col">
@@ -53,12 +55,24 @@ export const SourceCanvasInspector = (props: SourceCanvasInspectorProps) => {
           
           <Separator />
           
-          <Button
-            className="w-full"
-            onClick={() => addCanvasToReconstruction(manifest.id, canvas)}>
-            <Plus className="size-4" />
-            Add to Reconstruction
-          </Button>
+          <div className="space-y-2">
+            <Button
+              className="w-full"
+              onClick={() => addCanvasToReconstruction(manifest.id, canvas)}>
+              <Plus className="size-4" />
+              Add to Reconstruction
+            </Button>
+
+            {isComposerOpen && (
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => addCanvas(canvas)}>
+                <Plus className="size-4" />
+                Add to Composer
+              </Button>
+            )}
+          </div>
 
           <Separator />
 

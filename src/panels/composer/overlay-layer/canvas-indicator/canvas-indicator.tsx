@@ -12,8 +12,8 @@ export const CanvasIndicator = () => {
       y={0}
       width={1}
       height={aspectRatio}
-      fill="oklch(0.39 0.18 349.32)"
-      fillOpacity={0}
+      fill="#fff"
+      fillOpacity={0.9}
       stroke="oklch(0.39 0.18 349.32)"
       strokeWidth={1.5}
       strokeOpacity={0.25}

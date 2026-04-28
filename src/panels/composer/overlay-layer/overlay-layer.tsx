@@ -13,12 +13,13 @@ interface OverlayLayerProps {
 export const OverlayLayer = (props: OverlayLayerProps) => {
   const { viewer } = props;
 
-  const groupRef = useRef<SVGGElement>(null);
+  const belowRef = useRef<SVGGElement>(null);
+  const aboveRef = useRef<SVGGElement>(null);
 
   const [containerSize, setContainerSize] = useState<{ x: number , y: number }>({ x: 0 , y: 0 });
 
   useEffect(() => {
-    if (!viewer || !groupRef.current) return;
+    if (!viewer || !belowRef.current || !aboveRef.current) return;
 
     const onUpdateViewport = () => {
       const bounds = viewer.viewport.getBounds(true);
@@ -30,7 +31,8 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
       const transform = 
         `scale(${scaleX}, ${scaleY}) translate(${-bounds.x}, ${-bounds.y})`;
 
-      groupRef.current?.setAttribute('transform', transform);
+      belowRef.current?.setAttribute('transform', transform);
+      aboveRef.current?.setAttribute('transform', transform);
     };
 
     const onResize = () => {
@@ -51,15 +53,26 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
   }, [viewer]);
 
   return viewer ? (
-    <svg
-      viewBox={`0 0 ${containerSize.x} ${containerSize.y}`}
-      className="absolute inset-0 size-full pointer-events-none">
-      <g ref={groupRef} className="pointer-events-auto">
-        <CanvasIndicator />
-        <HoverLayer viewer={viewer} />
-        <ToolLayer viewer={viewer} />
-      </g>
-    </svg>
+    <>
+      {/* Elements BELOW the OSD image layer */}
+      <svg
+        viewBox={`0 0 ${containerSize.x} ${containerSize.y}`}
+        className="absolute inset-0 size-full pointer-events-none z-0">
+        <g ref={belowRef} className="pointer-events-auto">
+          <CanvasIndicator />
+        </g>
+      </svg>
+
+      {/* Elements ABOVE the OSD image layer */}
+      <svg
+        viewBox={`0 0 ${containerSize.x} ${containerSize.y}`}
+        className="absolute inset-0 size-full pointer-events-none z-20">
+        <g ref={aboveRef} className="pointer-events-auto">
+          <HoverLayer viewer={viewer} />
+          <ToolLayer viewer={viewer} />
+        </g>
+      </svg>
+    </>
   ) : null;
 
 }

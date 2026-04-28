@@ -22,9 +22,18 @@ export const Toolbar = (props: ToolbarProps) => {
 
   const selectedId = useComposerState(state => state.selectedId);
 
+  const canvasWidth = useComposerState(state => state.canvasWidth);
+  const canvasHeight = useComposerState(state => state.canvasHeight);
+
   return (
-    <div className="absolute bottom-4 w-full flex justify-center">
-      <div className="bg-white flex gap-1 border min-w-40 rounded p-1 shadow-xs">
+    <div className="absolute bottom-4 w-full flex justify-center z-50">
+      <div className="bg-white flex items-center gap-1 border min-w-40 rounded p-1 shadow-xs">
+        <div className="text-[11px] font-mono text-muted-foreground py-1 px-2">
+          {canvasWidth.toLocaleString()} x {canvasHeight.toLocaleString()}
+        </div>
+
+        <Separator orientation="vertical" />
+
         <Tooltip>
           <TooltipTrigger
             render={
