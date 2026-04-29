@@ -5,6 +5,7 @@ import { useWorkspaceStore } from '@/store';
 import { useComposerState } from './composer-state';
 import { OverlayLayer } from './overlay-layer';
 import { Toolbar } from './toolbar';
+import { Puzzle } from 'lucide-react';
 
 export const Composer = (props: IDockviewPanelProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -185,7 +186,18 @@ export const Composer = (props: IDockviewPanelProps) => {
           <OverlayLayer viewer={viewer} />
         </div>
 
-        <Toolbar onSave={onSaveCanvas} />
+        {composerActiveCanvasId ? (
+          <Toolbar onSave={onSaveCanvas} />
+        ): (
+          <div className="absolute bg-white inset-0 flex size-full items-center justify-center p-4">
+            <div className="text-center flex flex-col gap-3">
+              <Puzzle className="mx-auto size-8 text-neutral-300" strokeWidth={1.5} />
+              <p className="text-sm text-muted-foreground/65 max-w-xs leading-relaxed">
+                Double-click a canvas in the Reconstruction to edit it in the Composer
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
