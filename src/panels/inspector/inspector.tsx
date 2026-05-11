@@ -1,6 +1,7 @@
 import { Microscope } from 'lucide-react';
 import { useWorkspaceStore } from '@/store';
 import { SourceCanvasInspector } from './source-canvas-inspector';
+import { SourceManifestInspector } from './source-manifest-inspector';
 
 export const Inspector = () => {
   const project = useWorkspaceStore(state => state.project);
@@ -8,12 +9,20 @@ export const Inspector = () => {
 
   if (!project) return;
 
+  const isSourceManifestSelection: boolean = 
+    !!(selection?.manifestId && selection.type === 'manifest');
+
   const isSourceCanvasSelection: boolean = 
     !!(selection?.sourceCanvasId && selection.manifestId && selection.type === 'source_canvas');
 
   return (
     <div className="flex h-full w-full flex-col">
-      {isSourceCanvasSelection ? (
+      {isSourceManifestSelection ? (
+        <div className="flex-1 overflow-auto">
+          <SourceManifestInspector 
+            manifestId={selection!.manifestId!} />
+        </div>
+      ) : isSourceCanvasSelection ? (
         <div className="flex-1 overflow-auto">
           <SourceCanvasInspector 
             canvasId={selection!.sourceCanvasId!} 

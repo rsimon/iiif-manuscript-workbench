@@ -27,10 +27,6 @@ interface ManifestTreeItemProps {
 export const ManifestTreeItem = (props: ManifestTreeItemProps) => {
   const { manifest } = props.source;
 
-  const onSelectManifest = () => {
-    console.log('Not implemented yet');
-  }
-
   return (
     <div className="mb-1">
       <div
@@ -40,7 +36,7 @@ export const ManifestTreeItem = (props: ManifestTreeItemProps) => {
             ? 'bg-accent text-accent-foreground'
             : 'hover:bg-accent/80'
         )}
-        onClick={onSelectManifest}>
+        onClick={props.onSelectManifest}>
 
         <button
           onClick={(e) => {
