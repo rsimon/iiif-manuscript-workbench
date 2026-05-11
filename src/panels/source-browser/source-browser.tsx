@@ -6,6 +6,7 @@ import { ManifestTree } from './manifest-tree';
 import { useWorkspaceStore } from '@/store';
 
 export const SourceBrowser = () => {
+  const sources = useWorkspaceStore(state => (state.project?.sources || []).length);
   const removeAllSourceManifests = useWorkspaceStore(state => state.removeAllSourceManifests);
   const expandAll = useWorkspaceStore(state => state.expandAllManifests);
   const collapseAll = useWorkspaceStore(state => state.collapseAllManifests);
@@ -16,12 +17,14 @@ export const SourceBrowser = () => {
     <div className="flex h-full w-full flex-col">
       <div className="shrink-0 border-b p-0.5 flex justify-end">
         <PanelActionButton
+          disabled={sources === 0}
           tooltip="Collapse all"
           onClick={collapseAll}>
           <ListChevronsDownUp />
         </PanelActionButton>
 
         <PanelActionButton
+          disabled={sources === 0}
           tooltip="Expand all"
           onClick={expandAll}>
           <ListChevronsUpDown />
