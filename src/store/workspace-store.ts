@@ -24,6 +24,8 @@ interface WorkspaceStore {
   removeSourceManifest: (manifestId: string) => void;
   removeAllSourceManifests: () => void;
   toggleSourceManifestExpanded: (manifestId: string) => void;
+  collapseAllManifests: () => void;
+  expandAllManifests: () => void;
 
   /**
    * Actions: reconstruction
@@ -113,6 +115,26 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
           },
         });
       },
+
+      collapseAllManifests: () => set(({ project }) => {
+        if (!project) return {};
+        return {
+          project: {
+            ...project,
+            sources: project?.sources.map(({ expanded, ...rest }) => rest)
+          }
+        }
+      }),
+
+      expandAllManifests: () => set(({ project }) => {
+        if (!project) return {};
+        return {
+          project: {
+            ...project,
+            sources: project?.sources.map(s => ({ ...s, expanded: true }))
+          }
+        }
+      }),
 
       addCanvasToReconstruction: (sourceManifestId, canvas) => {
         const { project } = get();
