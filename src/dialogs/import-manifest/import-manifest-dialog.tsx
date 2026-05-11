@@ -32,7 +32,8 @@ interface ImportManifestDialogProps {
 type DialogStep =
   | { phase: 'input' }
   | { phase: 'crawling'; foundCount: number }
-  | { phase: 'confirm'; manifests: CozyCollectionManifestItem[] };
+  | { phase: 'confirm'; manifests: CozyCollectionManifestItem[] }
+  | { phase: 'bulk-import'; progress: number; total: number; current?: string };
 
 export const ImportManifestDialog = (props: ImportManifestDialogProps) => {
   const project = useWorkspaceStore(state => state.project);
@@ -107,14 +108,25 @@ export const ImportManifestDialog = (props: ImportManifestDialogProps) => {
   const onConfirmCollectionImport = () => {
     if (step.phase !== 'confirm') return;
 
+    const total = step.manifests.length;
+
+    let progress = 1;
+    let current = step.manifests[0].getLabel();
+
+    setStep({ phase: 'bulk-import', progress, total, current });
+
     step.manifests.reduce<Promise<void>>((p, manifest) => p.then(() => {
+      current = manifest.getLabel();
+
+      setStep({ phase: 'bulk-import', progress, total, current });
       return throttledParseURL(manifest.id).then(result => {
         if (result.type === 'manifest') {
-          console.log('Adding manifest', result.resource.getLabel());
           addSourceManifest(manifest.id, result.resource);
         } else {
           throw new Error('Not a valid IIIF presentation manifest'); 
         }
+
+        progress += 1;
       });
     }), Promise.resolve()).then(() => {
       resetDialog();
@@ -142,15 +154,15 @@ export const ImportManifestDialog = (props: ImportManifestDialogProps) => {
             Import IIIF Manifest
           </DialogTitle>
 
-          <DialogDescription>
+          <DialogDescription className="leading-relaxed">
             {step.phase === 'input' ? (
               <span>
-                Enter the URL of a IIIF Presentation API 2.1 manifest to import it as
+                Enter the URL of a IIIF Presentation or Collection manifest to import it as
                 a source for your reconstruction.
               </span>
             ) : (
               <span>
-                The URL points to a IIIF Collection manifest.
+                This URL points to a IIIF Collection manifest.
               </span>
             )}
           </DialogDescription>
@@ -187,7 +199,7 @@ export const ImportManifestDialog = (props: ImportManifestDialogProps) => {
                 )}
               </AlertDescription>
             </Alert>
-          ) : (
+          ) : step.phase === 'confirm' ? (
             <Alert>
               <Layers className="size-4" />
               <AlertDescription>
@@ -195,6 +207,16 @@ export const ImportManifestDialog = (props: ImportManifestDialogProps) => {
                 <span className="font-semibold">{step.manifests.length.toLocaleString()}</span>{' '}
                 {step.manifests.length === 1 ? 'manifest' : 'manifests'}.
                 Import all of them?
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <Alert>
+              <Layers className="size-4" />
+              <AlertDescription className="overflow-hidden">
+                Importing {step.progress} of {step.total}
+                <div className="font-light whitespace-nowrap truncate mt-2">
+                  {step.current || '[unnamed manifest]'}
+                </div>
               </AlertDescription>
             </Alert>
           )}

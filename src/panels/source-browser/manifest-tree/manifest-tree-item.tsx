@@ -55,9 +55,9 @@ export const ManifestTreeItem = (props: ManifestTreeItemProps) => {
           )}
         </button>
 
-        <div className="flex-1 truncate font-medium flex gap-2 justify-between items-center">
-          {manifest.getLabel()} 
-          <span className="text-muted-foreground text-xs">
+        <div className="flex-1 overflow-hidden whitespace-nowrap font-medium flex gap-2 justify-between items-center">
+          <span className="truncate">{manifest.getLabel()}</span>
+          <span className="shrink-0 text-muted-foreground text-xs">
             <Images className="size-3.5 inline mb-0.5 mr-px" /> {manifest.canvases.length}
           </span>          
         </div>

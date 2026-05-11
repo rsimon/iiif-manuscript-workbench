@@ -35,7 +35,7 @@ export const CanvasTreeItem = (props: CanvasTreeItemProps) => {
     <div
       draggable
       className={cn(
-        'group flex cursor-pointer items-center justify-between gap-2 rounded p-1 text-sm transition-colors',
+        'group flex cursor-pointer items-center justify-between gap-2 rounded p-1 text-sm transition-colors overflow-hidden',
         isSelected
           ? 'bg-neutral-300 text-accent-foreground'
           : 'hover:bg-neutral-200/80'
@@ -52,7 +52,7 @@ export const CanvasTreeItem = (props: CanvasTreeItemProps) => {
         e.dataTransfer.effectAllowed = 'copy';
       }}>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-hidden">
         <img 
           src={canvas.getThumbnailURL(80)}
           alt={`${canvas.getLabel()} preview image`}
