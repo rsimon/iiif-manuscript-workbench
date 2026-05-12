@@ -45,7 +45,7 @@ export const CanvasCard = (props: CanvasCardProps) => {
 
   const commitEdit = () => {
     setIsEditing(false);
-    renameCanvas(canvas.id, labelDraft.trim());
+    renameCanvas(props.rc.id, labelDraft.trim());
   };
 
   return (

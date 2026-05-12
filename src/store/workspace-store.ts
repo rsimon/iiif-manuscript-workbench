@@ -189,12 +189,11 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
         });
       },
 
-
-      renameCanvas: (canvasId, label) => {
+      renameCanvas: (rcId, label) => {
         const { project } = get();
         if (!project) return;
 
-        const rc = project.reconstruction.find(c => c.id === canvasId);
+        const rc = project.reconstruction.find(c => c.id === rcId);
         if (!rc) return;
 
         const updated = {
@@ -211,7 +210,7 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
         set({
           project: {
             ...project,
-            reconstruction: project.reconstruction.map(rc => rc.id === canvasId ? updated: rc)
+            reconstruction: project.reconstruction.map(rc => rc.id === rcId ? updated: rc)
           }
         });
       },
