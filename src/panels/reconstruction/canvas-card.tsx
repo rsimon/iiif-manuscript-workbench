@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { Layers2, X } from 'lucide-react';
 import TextareaAutosize from 'react-textarea-autosize';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/shadcn/utils';
 import { useWorkspaceStore } from '@/store';
 import type { ReconstructionCanvas } from '@/types';
@@ -31,11 +31,11 @@ export const CanvasCard = (props: CanvasCardProps) => {
 
   const { canvas } = props.rc;
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [labelDraft, setLabelDraft] = useState('');
-
   const renameCanvas = useWorkspaceStore(state => state.renameCanvas);
   const openInComposer = useWorkspaceStore(state => state.openInComposer);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [labelDraft, setLabelDraft] = useState('');
 
   const startEditing = (e: React.MouseEvent) => {
     e.stopPropagation(); // don't fire onSelect
@@ -94,6 +94,7 @@ export const CanvasCard = (props: CanvasCardProps) => {
             rows={1}
             maxRows={3}
             value={labelDraft}
+            onFocus={e => e.target.select()}
             onBlur={commitEdit}
             onChange={e => setLabelDraft(e.target.value)}
             onKeyDown={e => {
@@ -104,7 +105,7 @@ export const CanvasCard = (props: CanvasCardProps) => {
             onClick={e => e.stopPropagation()}
             onDoubleClick={e => e.stopPropagation()}
             className={cn(
-              'w-full resize-none bg-transparent text-[10px] text-muted-foreground',
+              'w-full resize-none bg-slate-100 rounded-xs text-[10px] text-muted-foreground',
               'outline-none focus:text-foreground',
             )}>
           </TextareaAutosize>
