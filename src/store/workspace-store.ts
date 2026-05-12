@@ -32,6 +32,7 @@ interface WorkspaceStore {
    */
   addCanvasToReconstruction: (sourceManifestId: string, canvas: CozyCanvas) => void;
   createEmptyCanvas: (width?: number, height?: number) => void;
+  renameCanvas: (canvasId: string, label: string) => void;
   removeCanvasFromReconstruction: (canvasId: string) => void;
   reorderReconstruction: (activeId: string, overId: string) => void;
   resetReconstruction: () => void;
@@ -184,6 +185,33 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
           project: {
             ...project,
             reconstruction: [...project.reconstruction, canvas]
+          }
+        });
+      },
+
+
+      renameCanvas: (canvasId, label) => {
+        const { project } = get();
+        if (!project) return;
+
+        const rc = project.reconstruction.find(c => c.id === canvasId);
+        if (!rc) return;
+
+        const updated = {
+          ...rc,
+          // @ts-ignore
+          canvas: hydrateCanvas({
+            source: {
+              ...rc.canvas.source,
+              label: { en: [ label ]}
+            }
+          })
+        } as ReconstructionCanvas;
+
+        set({
+          project: {
+            ...project,
+            reconstruction: project.reconstruction.map(rc => rc.id === canvasId ? updated: rc)
           }
         });
       },

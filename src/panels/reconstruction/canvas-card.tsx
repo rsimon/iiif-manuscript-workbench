@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Layers2, X } from 'lucide-react';
+import TextareaAutosize from 'react-textarea-autosize';
 import { cn } from '@/shadcn/utils';
 import { useWorkspaceStore } from '@/store';
 import type { ReconstructionCanvas } from '@/types';
@@ -29,7 +31,22 @@ export const CanvasCard = (props: CanvasCardProps) => {
 
   const { canvas } = props.rc;
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [labelDraft, setLabelDraft] = useState('');
+
+  const renameCanvas = useWorkspaceStore(state => state.renameCanvas);
   const openInComposer = useWorkspaceStore(state => state.openInComposer);
+
+  const startEditing = (e: React.MouseEvent) => {
+    e.stopPropagation(); // don't fire onSelect
+    setLabelDraft(canvas.getLabel() || `Canvas ${props.index + 1}`);
+    setIsEditing(true);
+  };
+
+  const commitEdit = () => {
+    setIsEditing(false);
+    renameCanvas(canvas.id, labelDraft.trim());
+  };
 
   return (
     <div
@@ -70,10 +87,34 @@ export const CanvasCard = (props: CanvasCardProps) => {
         </div>
       </div>
 
-      <div className="bg-panel-header px-1 py-0.5">
-        <p className="truncate text-[10px] text-muted-foreground">
-          {canvas.getLabel() || `Canvas ${props.index + 1}`}
-        </p>
+      <div className="bg-panel-header px-1 py-0.5 w-20">
+        {isEditing ? (
+          <TextareaAutosize
+            autoFocus
+            rows={1}
+            maxRows={3}
+            value={labelDraft}
+            onBlur={commitEdit}
+            onChange={e => setLabelDraft(e.target.value)}
+            onKeyDown={e => {
+              e.stopPropagation();
+              if (e.key === 'Enter') { e.preventDefault(); commitEdit(); }
+              if (e.key === 'Escape') { setIsEditing(false); }
+            }}
+            onClick={e => e.stopPropagation()}
+            onDoubleClick={e => e.stopPropagation()}
+            className={cn(
+              'w-full resize-none bg-transparent text-[10px] text-muted-foreground',
+              'outline-none focus:text-foreground',
+            )}>
+          </TextareaAutosize>
+        ) : (
+          <p 
+            className="truncate text-[10px] text-muted-foreground"
+            onClick={startEditing} >
+            {canvas.getLabel() || `Canvas ${props.index + 1}`}
+          </p>
+        )}
       </div>
     </div>
   )
