@@ -31,6 +31,7 @@ export const createCanvasWorld = (viewer: Viewer, images: DraggableImage[], canv
   const items = Array(itemCount).fill(null).map((_, i) => {
     const osdImage = viewer.world.getItemAt(i);
 
+    // @ts-ignore
     const { dimensions, url } = osdImage.source;
 
     const id = url || (osdImage.source as any).id || (osdImage.source as any)['@id'];

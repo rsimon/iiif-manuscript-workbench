@@ -160,6 +160,7 @@ export const Composer = (props: IDockviewPanelProps) => {
           containerRef.current?.clientHeight
         );
 
+        // @ts-ignore
         viewerRef.current.viewport.resize(newSize, true); 
         viewerRef.current.viewport.update(); 
       }
