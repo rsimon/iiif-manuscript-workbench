@@ -6,7 +6,7 @@ export const CanvasIndicator = () => {
 
   const aspectRatio = canvasHeight / canvasWidth;
 
-  return (
+  return isNaN(aspectRatio) ? null : (
     <rect
       x={0}
       y={0}

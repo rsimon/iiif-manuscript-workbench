@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import OpenSeadragon from 'openseadragon';
+import type { CozyImageResource } from 'cozy-iiif';
 import { useWorkspaceStore } from '@/store';
 
 export const Preview = () => {
@@ -54,8 +55,7 @@ export const Preview = () => {
     
     if (!((canvas?.images || []).length > 0)) return;
 
-    // TODO just a hack for now
-    canvas!.images.forEach((image, idx) => {
+    const addImage = (image: CozyImageResource) => new Promise<void>(resolve => {
       if (image.type === 'dynamic' || image.type === 'level0') {
         const tileSource = image.serviceUrl;
 
@@ -69,14 +69,20 @@ export const Preview = () => {
             x,
             y,
             width,
-            index: idx + 1 
+            success: () => resolve()
           });
         } else {
-          viewer.addTiledImage({ tileSource });
+          viewer.addTiledImage({ tileSource, success: () => resolve() });
         }
       } else {
         // TODO
       }
+    });
+
+    Promise.all(canvas!.images.map(addImage)).then(() => {
+      const aspectRatio = canvas!.width / canvas!.height;
+      const canvasRect = new OpenSeadragon.Rect(0, 0, 1, 1 / aspectRatio);
+      viewer.viewport.fitBounds(canvasRect, true);
     });
 
     return () => {
