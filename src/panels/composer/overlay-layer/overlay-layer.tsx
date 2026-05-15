@@ -8,6 +8,8 @@ interface OverlayLayerProps {
 
   viewer?: Viewer;
 
+  onCanvasUpdated(): void;
+
 }
 
 export const OverlayLayer = (props: OverlayLayerProps) => {
@@ -90,8 +92,12 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
         ref={aboveSvgRef}
         className="absolute inset-0 size-full pointer-events-none z-20">
         <g ref={aboveGroupRef} className="pointer-events-auto">
-          <HoverLayer viewer={viewer} />
-          <ToolLayer viewer={viewer} />
+          <HoverLayer
+            viewer={viewer} />
+
+          <ToolLayer 
+            viewer={viewer} 
+            onCanvasUpdated={props.onCanvasUpdated} />
         </g>
       </svg>
     </>

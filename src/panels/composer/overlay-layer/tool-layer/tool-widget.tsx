@@ -12,6 +12,8 @@ interface ToolWidgetProps {
 
   selected: SelectedImage;
 
+  onCanvasUpdated(): void;
+
 }
 
 const HANDLE_TYPES: CornerHandleType[] = [
@@ -58,6 +60,7 @@ export const ToolWidget = (props: ToolWidgetProps) => {
     }
 
     updateImage(props.selected.id, updated);
+    props.onCanvasUpdated();
   }
 
   const onResizeImage = (handle: ResizeHandleType, delta: number[]) => {
@@ -110,17 +113,17 @@ export const ToolWidget = (props: ToolWidgetProps) => {
     const updated: SelectedImage = {
       ...props.selected,
       x: nextBounds.x,
-      y: nextBounds.y
+      y: nextBounds.y,
+      width: nextBounds.width
     }
 
     updateImage(props.selected.id, updated);
+    props.onCanvasUpdated();
   }
 
   const onPointerDown = (evt: React.PointerEvent) => {
     const target = evt.target as Element;
     target.setPointerCapture(evt.pointerId);
-    
-    console.log('down', evt.pointerId);
 
     const pt = viewport.pointFromPixel(new Point(evt.clientX, evt.clientY));
     setOrigin(pt);

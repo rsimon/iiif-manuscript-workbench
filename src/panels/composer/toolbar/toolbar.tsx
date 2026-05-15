@@ -12,13 +12,7 @@ import {
   Undo2 
 } from 'lucide-react';
 
-interface ToolbarProps {
-
-  onSave(): void;
-
-}
-
-export const Toolbar = (props: ToolbarProps) => {
+export const Toolbar = () => {
 
   const selectedId = useComposerState(state => state.selectedId);
 
@@ -128,12 +122,6 @@ export const Toolbar = (props: ToolbarProps) => {
             Redo
           </TooltipContent>
         </Tooltip>
-
-        <Button
-          className="ml-2"
-          onClick={props.onSave}>
-          Save
-        </Button>
       </div>
     </div>
   )

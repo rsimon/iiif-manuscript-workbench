@@ -1,4 +1,4 @@
-import { useEffect, useRef} from 'react';
+import { useEffect, useRef } from 'react';
 import type { IDockviewPanelProps } from 'dockview-react';
 import OpenSeadragon, { type Viewer } from 'openseadragon';
 import { useWorkspaceStore } from '@/store';
@@ -92,6 +92,7 @@ export const Composer = (props: IDockviewPanelProps) => {
 
       if (images.length === 0) {
         viewer.world.removeAll(); 
+
         viewer.addTiledImage({
           tileSource: {
             type: 'legacy-image-pyramid',
@@ -112,10 +113,12 @@ export const Composer = (props: IDockviewPanelProps) => {
           // if info.json loads too slow: OSD doesn't render the image until some other user
           // action forces an update - zoom, pan, resize. Therefore, resolve the info.json
           // manually instead, and then pass the JSON to OSD!
-          return fetch(i.tileSource).then(res => res.json()).then(tileSource => ({ 
-            ...i,
-            tileSource 
-          }));
+          return fetch(i.tileSource).then(res => res.json()).then(tileSource => {    
+            return {
+              ...i,
+              tileSource
+            }
+          });
         } else {
           // Warning: OSD mutates TiledImages in place - do a simple 'deep clone' 
           return Promise.resolve({
@@ -146,7 +149,7 @@ export const Composer = (props: IDockviewPanelProps) => {
       cancelled = true;
       dispose();
     }
-  }, [images.length === 0 ? 'empty' : images.map(i => i.id).join(':'), props.api]);
+  }, [images.length === 0 ? 'empty' : images.map(i => i.id).join('.'), props.api]);
 
   useEffect(() => {
     const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
@@ -184,11 +187,13 @@ export const Composer = (props: IDockviewPanelProps) => {
         <div 
           ref={containerRef} 
           className="size-full bg-neutral-100 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] bg-size-[16px_16px] [&>.openseadragon-container]:z-10">
-          <OverlayLayer viewer={viewer} />
+          <OverlayLayer 
+            viewer={viewer} 
+            onCanvasUpdated={onSaveCanvas} />
         </div>
 
         {composerActiveCanvasId ? (
-          <Toolbar onSave={onSaveCanvas} />
+          <Toolbar />
         ): (
           <div className="absolute bg-white inset-0 flex size-full items-center justify-center p-4">
             <div className="text-center flex flex-col gap-3">

@@ -8,6 +8,8 @@ interface ToolLayerProps {
 
   viewer: Viewer;
 
+  onCanvasUpdated(): void;
+
 }
 
 export const ToolLayer = (props: ToolLayerProps) => {
@@ -32,7 +34,8 @@ export const ToolLayer = (props: ToolLayerProps) => {
   return selected ? (
     <ToolWidget 
       selected={selected} 
-      viewer={viewer} />
+      viewer={viewer} 
+      onCanvasUpdated={props.onCanvasUpdated} />
   ) : null;
 
 }
