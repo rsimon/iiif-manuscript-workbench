@@ -6,23 +6,30 @@ export const createManifest = (
   id: string,
   project: Project, 
   label: string, 
-  description: string, 
+  summary: string, 
   attribution: string
 ) => ({
   '@context': 'http://iiif.io/api/presentation/3/context.json',
   type: 'Manifest',
   id: id,
-  label: label,
-  description,
-  attribution,
+  label: {
+    en: [label]
+  },
+  summary: {
+    en: [summary]
+  },
+  requiredStatement: {
+    label: { en: [ 'Attribution' ]},
+    value: { en: [ attribution ]}
+  },
   metadata: [
     {
-      label: 'Created',
-      value: new Date().toISOString(),
+      label: { en: ['Created' ]},
+      value: { en: [ new Date().toISOString() ]},
     },
     {
-      label: 'Source Manifests',
-      value: project.sources.map((s) => s.manifestUrl).join(', '),
+      label: { en: ['Source Manifests']},
+      value: { en: [project.sources.map((s) => s.manifestUrl).join(', ')]},
     },
   ],
   items: project.reconstruction.map(sc => sc.canvas.source)
