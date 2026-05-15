@@ -16,7 +16,7 @@ export const ToolLayer = (props: ToolLayerProps) => {
   const { viewer } = props;
 
   const [selected, setSelected] = useSelectionManager();
-
+  
   useEffect(() => {
     const onCanvasClick = (event: CanvasClickEvent) => {
       if (!event.quick) return; // Ignore drag

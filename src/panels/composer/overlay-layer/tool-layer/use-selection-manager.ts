@@ -19,7 +19,13 @@ export const useSelectionManager = (): [
 
   // Derivative DraggableImage
   const images = useComposerState(s => s.images);
+  const selectedId = useComposerState(s => s.selectedId);
   const setSelectedId = useComposerState(s => s.setSelectedId);
+
+  // Sync if the selection is reset from outside
+  useEffect(() => {
+    if (!selectedId) setSource(undefined);
+  }, [selectedId]);
 
   const derivedSourceId = useMemo(() => {
     if (!source) return null;

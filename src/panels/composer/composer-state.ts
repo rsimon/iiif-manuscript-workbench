@@ -78,11 +78,15 @@ export const useComposerState = create<ComposerState>((set, get) => ({
       set(state => ({
         canvasWidth: canvas.width,
         canvasHeight: canvas.height,
-        images: clearOthers ? toAdd : [...state.images, ...toAdd]
+        images: clearOthers ? toAdd : [...state.images, ...toAdd],
+        selectedId: null,
+        hoveredId: null
       }));
     } else {
       set(state => ({
-        images: [...state.images, ...toAdd]
+        images: [...state.images, ...toAdd],
+        selectedId: null,
+        hoveredId: null
       }));
     }
   },

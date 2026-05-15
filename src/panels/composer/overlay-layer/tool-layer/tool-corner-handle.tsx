@@ -37,8 +37,10 @@ export const ToolCornerHandle = (props: ToolCornerHandleProps) => {
     const onUpdateViewport = () => {
       const zoom = viewer.viewport.getZoom(true);
       const containerWidth = viewer.container.clientWidth;
+      if (containerWidth === 0) return;
 
       const s = HANDLE_SIZE_PX / (zoom * containerWidth);
+
       handleRef.current?.setAttribute('width', `${s}`);
       handleRef.current?.setAttribute('height', `${s}`);
       handleRef.current?.setAttribute('transform', `translate(-${s/2}, -${s/2})`);
