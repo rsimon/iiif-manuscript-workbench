@@ -109,10 +109,6 @@ export const Composer = (props: IDockviewPanelProps) => {
 
       Promise.all(images.map(i => {
         if (typeof i.tileSource === 'string') {
-          // Warning, providing a IIIF info.json string sometimes leads to stale rendering,
-          // if info.json loads too slow: OSD doesn't render the image until some other user
-          // action forces an update - zoom, pan, resize. Therefore, resolve the info.json
-          // manually instead, and then pass the JSON to OSD!
           return fetch(i.tileSource).then(res => res.json()).then(tileSource => {    
             return {
               ...i,
@@ -154,6 +150,10 @@ export const Composer = (props: IDockviewPanelProps) => {
   useEffect(() => {
     const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
       if (isVisible && viewerRef.current) {
+        // OSD doesn't properly react to tab visibility changes. This may
+        // cause it to operate on a stale (0x0px) viewer element. Forcing
+        // a resize to the correct viewer element size after visibility change 
+        // seems to resolve this. 
         const newSize = new OpenSeadragon.Point(
           containerRef.current?.clientWidth,
           containerRef.current?.clientHeight
