@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Placement, Point, Rect, type Viewer } from 'openseadragon';
+import { useDebouncedCallback } from 'use-debounce';
 import { useComposerState } from '../../composer-state';
 import { cornersToSvgPoints, getImageCorners } from '../overlay-utils';
 import type { SelectedImage } from './use-selection-manager';
@@ -33,6 +34,11 @@ export const ToolWidget = (props: ToolWidgetProps) => {
 
   const updateImage = useComposerState(state => state.updateImage);
 
+  const onCanvasUpdatedDebounced = useDebouncedCallback(
+    props.onCanvasUpdated,
+    50
+  );
+
   useEffect(() => {
     setOrigin(undefined);
     setInitialBounds(props.selected.osdImage.getBounds());
@@ -60,7 +66,7 @@ export const ToolWidget = (props: ToolWidgetProps) => {
     }
 
     updateImage(props.selected.id, updated);
-    props.onCanvasUpdated();
+    onCanvasUpdatedDebounced();
   }
 
   const onResizeImage = (handle: ResizeHandleType, delta: number[]) => {
@@ -118,7 +124,7 @@ export const ToolWidget = (props: ToolWidgetProps) => {
     }
 
     updateImage(props.selected.id, updated);
-    props.onCanvasUpdated();
+    onCanvasUpdatedDebounced();
   }
 
   const onPointerDown = (evt: React.PointerEvent) => {
@@ -147,6 +153,8 @@ export const ToolWidget = (props: ToolWidgetProps) => {
   const onPointerUp = (evt: React.PointerEvent) => {
     const target = evt.target as Element;
     target.releasePointerCapture(evt.pointerId);
+
+    onCanvasUpdatedDebounced.flush();
     
     setOrigin(undefined);
     setInitialBounds(props.selected.osdImage.getBounds());

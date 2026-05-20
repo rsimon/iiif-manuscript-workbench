@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { Cozy, type CozyCanvas, type CozyManifest } from 'cozy-iiif';
 import { hydrateCanvas } from 'cozy-iiif/helpers';
 import type { Project, ReconstructionCanvas, Selection, SourceManifest } from '@/types';
+import { getReconstructionID } from './get-reconstruction-id';
 
 interface WorkspaceStore {
   
@@ -162,7 +163,7 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
         
         const order = project.reconstruction.length;
 
-        const id = crypto.randomUUID();
+        const id = `${getReconstructionID()}/canvas/${crypto.randomUUID()}`;
 
         const canvas: ReconstructionCanvas = {
           id, 

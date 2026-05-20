@@ -5,7 +5,7 @@ import { Button } from '@/shadcn/button';
 import { Label } from '@/shadcn/label';
 import { Input } from '@/shadcn/input';
 import { Textarea } from '@/shadcn/textarea';
-import { useWorkspaceStore } from '@/store';
+import { getReconstructionID, useWorkspaceStore } from '@/store';
 import { createManifest } from './create-manifest';
 import { 
   Dialog, 
@@ -21,8 +21,6 @@ import {
   TabsList,
   TabsTrigger
 } from '@/shadcn/tabs';
-
-const DEFAULT_ID = 'http://localhost:4321/manifest/0001';
 
 interface ExportManifestDialogProps {
 
@@ -46,7 +44,7 @@ export const ExportManifestDialog = (props: ExportManifestDialogProps) => {
   if (!project || !open) return null;
 
   const generatedManifest = 
-    createManifest(DEFAULT_ID, project, label, description, attribution);
+    createManifest(getReconstructionID(), project, label, description, attribution);
 
   const manifestJson = 
     JSON.stringify(generatedManifest, null, 2);

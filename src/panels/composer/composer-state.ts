@@ -4,6 +4,9 @@ import type { CozyCanvas } from 'cozy-iiif';
 import { hydrateCanvas } from 'cozy-iiif/helpers';
 import type { DraggableImage } from './composer-types';
 import { createCanvasWorld } from './canvas-world';
+import { getReconstructionID } from '@/store';
+
+const BASE_ID = `${getReconstructionID()}/canvas`;
 
 export interface ComposerState {
 
@@ -97,7 +100,7 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
     const world = createCanvasWorld(viewer, images, canvasWidth, canvasHeight);
 
-    const canvasId = crypto.randomUUID() as string;
+    const canvasId = `${BASE_ID}/${crypto.randomUUID()}`;
 
     const canvas = {
       id: canvasId,
@@ -106,10 +109,10 @@ export const useComposerState = create<ComposerState>((set, get) => ({
       width: world.width,
       height: world.height,
       items: [{
-        id: crypto.randomUUID(),
+        id: `${canvasId}/page/${crypto.randomUUID()}`,
         type: 'AnnotationPage',
         items: world.images.map(image => ({
-          id: crypto.randomUUID(),
+          id: `${canvasId}/annotations/${crypto.randomUUID()}`,
           type: 'Annotation',
           motivation: 'painting',
           body: {
