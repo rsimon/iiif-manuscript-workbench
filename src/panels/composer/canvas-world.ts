@@ -51,7 +51,7 @@ export const createCanvasWorld = (viewer: Viewer, images: DraggableImage[], canv
       source: item.source
     };
 
-    if (x === 0 && y === 0 && item.width === canvasWidth && item.height === canvasHeight) {
+    if (x === 0 && y === 0 && width === canvasWidth && height === canvasHeight) {
       return image;
     } else {
       const on = [x, y, width, height].map(n => Math.round(n * canvasWidth)) as [number, number, number, number];

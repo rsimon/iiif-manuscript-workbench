@@ -36,7 +36,7 @@ export const ToolWidget = (props: ToolWidgetProps) => {
 
   const onCanvasUpdatedDebounced = useDebouncedCallback(
     props.onCanvasUpdated,
-    50
+    200
   );
 
   useEffect(() => {

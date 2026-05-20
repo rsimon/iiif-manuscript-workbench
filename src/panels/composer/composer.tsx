@@ -171,10 +171,11 @@ export const Composer = (props: IDockviewPanelProps) => {
   const onSaveCanvas = () => {
     if (!composerActiveCanvasId) return;
 
-    const canvas = getCanvas();
-    if (!canvas) return;
-
-    updateReconstructionCanvas(composerActiveCanvasId, canvas);
+    requestAnimationFrame(() => {
+      const canvas = getCanvas();
+      if (!canvas) return;
+      updateReconstructionCanvas(composerActiveCanvasId, canvas);
+    });
   }
 
   return (
