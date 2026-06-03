@@ -20,8 +20,8 @@ export const Toolbar = () => {
   const canvasHeight = useComposerState(state => state.canvasHeight);
 
   return (
-    <div className="absolute bottom-4 w-full flex justify-center z-50">
-      <div className="bg-white flex items-center gap-1 border min-w-40 rounded p-1 shadow-xs">
+    <div className="absolute bottom-4 w-full flex justify-center z-50 pointer-events-none">
+      <div className="bg-white flex items-center gap-1 border min-w-40 rounded p-1 shadow-xs pointer-events-auto">
         <div className="text-[11px] font-mono text-muted-foreground py-1 px-2">
           {canvasWidth.toLocaleString()} x {canvasHeight.toLocaleString()}
         </div>
