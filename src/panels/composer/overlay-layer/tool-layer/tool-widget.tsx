@@ -141,13 +141,11 @@ export const ToolWidget = (props: ToolWidgetProps) => {
     const { x, y } = viewport.pointFromPixel(new Point(evt.clientX, evt.clientY));
     const delta = [x - origin.x, y - origin.y];
 
-    requestAnimationFrame(() => {
-      if (handle === 'SHAPE') {
-        onMoveImage(delta); 
-      } else { 
-        onResizeImage(handle, delta);
-      }
-    });
+    if (handle === 'SHAPE') {
+      onMoveImage(delta); 
+    } else { 
+      onResizeImage(handle, delta);
+    }
   }
 
   const onPointerUp = (evt: React.PointerEvent) => {
