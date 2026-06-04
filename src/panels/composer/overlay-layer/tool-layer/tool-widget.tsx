@@ -169,16 +169,12 @@ export const ToolWidget = (props: ToolWidgetProps) => {
   return (
     <g>
       <polygon
-        className="cursor-grab"
+        className="cursor-grab pointer-events-none"
         points={cornersToSvgPoints(corners)}
         fill="transparent"
         stroke="white"
         strokeWidth={5}
-        vectorEffect="non-scaling-stroke"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove('SHAPE')}
-        onPointerUp={onPointerUp} 
-        onPointerCancel={onPointerCancel} />
+        vectorEffect="non-scaling-stroke" />
 
       <polygon
         className="cursor-grab"
