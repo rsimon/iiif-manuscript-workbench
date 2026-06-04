@@ -5,6 +5,8 @@ import { Separator } from '@/shadcn/separator';
 import { 
   ArrowDownNarrowWide, 
   ArrowUpNarrowWide, 
+  Check, 
+  LoaderCircle, 
   LockKeyhole, 
   Maximize, 
   Redo2, 
@@ -15,6 +17,7 @@ import {
 export const Toolbar = () => {
 
   const selectedId = useComposerState(state => state.selectedId);
+  const saving = useComposerState(state => state.saving);
 
   const canvasWidth = useComposerState(state => state.canvasWidth);
   const canvasHeight = useComposerState(state => state.canvasHeight);
@@ -122,6 +125,14 @@ export const Toolbar = () => {
             Redo
           </TooltipContent>
         </Tooltip>
+
+        <div className="bg-black text-white rounded flex gap-1.5 items-center font-medium h-9 px-2.5 text-sm">
+          {saving ? (
+            <><LoaderCircle className="size-4 animate-spin" /> Saving...</>
+          ) : (
+            <><Check className="size-4" /> Saved</>
+          )}
+        </div>
       </div>
     </div>
   )

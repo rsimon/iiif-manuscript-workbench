@@ -16,6 +16,7 @@ export const Composer = (props: IDockviewPanelProps) => {
   const composerActiveCanvasId = useWorkspaceStore(state => state.composerActiveCanvasId);
 
   const getCanvas = useComposerState(state => state.getCanvas);
+  const setSaving= useComposerState(state => state.setSaving);
 
   const viewer = useComposerState(state => state.viewer);
   const images = useComposerState(state => state.images);
@@ -177,10 +178,14 @@ export const Composer = (props: IDockviewPanelProps) => {
   const onSaveCanvas = () => {
     if (!composerActiveCanvasId) return;
 
+    setSaving(true);
+
     requestAnimationFrame(() => {
       const canvas = getCanvas();
       if (!canvas) return;
       updateReconstructionCanvas(composerActiveCanvasId, canvas);
+
+      setTimeout(() => setSaving(false), 500);
     });
   }
 

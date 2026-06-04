@@ -22,6 +22,8 @@ export interface ComposerState {
 
   selectedId: string | null;
 
+  saving: boolean;
+
   setViewer(viewer?: Viewer): void;
 
   addCanvas(canvas: CozyCanvas, clearOthers?: boolean): void;
@@ -35,6 +37,8 @@ export interface ComposerState {
   reset(): void;
 
   getCanvas(): CozyCanvas | undefined;
+
+  setSaving(saving: boolean): void;
 
 }
 
@@ -51,6 +55,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
   canvasWidth: 0,
 
   canvasHeight: 0,
+
+  saving: false,
 
   setViewer: (viewer?: Viewer) => set({ viewer }),
 
@@ -145,6 +151,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
     canvasHeight: 0,
     hoveredId: null,
     selectedId: null
-  }))
+  })),
+
+  setSaving: saving => set(() => ({ saving }))
 
 }));
