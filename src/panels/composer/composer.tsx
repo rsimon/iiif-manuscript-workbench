@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
+import { Puzzle } from 'lucide-react';
 import type { IDockviewPanelProps } from 'dockview-react';
 import OpenSeadragon, { type Viewer } from 'openseadragon';
 import { useWorkspaceStore } from '@/store';
 import { useComposerState } from './composer-state';
 import { OverlayLayer } from './overlay-layer';
 import { Toolbar } from './toolbar';
-import { Puzzle } from 'lucide-react';
 
 export const Composer = (props: IDockviewPanelProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -19,6 +19,8 @@ export const Composer = (props: IDockviewPanelProps) => {
 
   const viewer = useComposerState(state => state.viewer);
   const images = useComposerState(state => state.images);
+
+  const imagesRef = useRef(images);
 
   const setViewer = useComposerState(state => state.setViewer);
   const addCanvas = useComposerState(state => state.addCanvas);
@@ -64,6 +66,10 @@ export const Composer = (props: IDockviewPanelProps) => {
   }, []);
 
   useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
+
+  useEffect(() => {
     if (composerActiveCanvasId) {
       const rc = (project?.reconstruction || []).find(rc => rc.id === composerActiveCanvasId);
       if (!rc) return; // Should never happen
@@ -90,7 +96,7 @@ export const Composer = (props: IDockviewPanelProps) => {
       if (!viewerRef.current) return;
       const viewer = viewerRef.current;
 
-      if (images.length === 0) {
+      if (imagesRef.current.length === 0) {
         viewer.world.removeAll(); 
 
         viewer.addTiledImage({
@@ -107,7 +113,7 @@ export const Composer = (props: IDockviewPanelProps) => {
         return;
       }
 
-      Promise.all(images.map(i => {
+      Promise.all(imagesRef.current.map(i => {
         if (typeof i.tileSource === 'string') {
           return fetch(i.tileSource).then(res => res.json()).then(tileSource => {    
             return {
