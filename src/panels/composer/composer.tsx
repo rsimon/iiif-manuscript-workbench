@@ -20,6 +20,8 @@ export const Composer = (props: IDockviewPanelProps) => {
 
   const viewer = useComposerState(state => state.viewer);
   const images = useComposerState(state => state.images);
+  const canvasWidth = useComposerState(state => state.canvasWidth);
+  const canvasHeight = useComposerState(state => state.canvasHeight);
 
   const imagesRef = useRef(images);
 
@@ -127,21 +129,24 @@ export const Composer = (props: IDockviewPanelProps) => {
           return Promise.resolve({
             ...i,
             tileSource: {...i.tileSource }
-          })
+          });
         }
       })).then(resolvedSources => {
         if (cancelled) return; // discard stale result
 
         viewer.world.removeAll();
         resolvedSources.forEach(i => viewer.addTiledImage(i));
+
+        const aspectRatio = canvasWidth / canvasHeight;
+        const canvasRect = new OpenSeadragon.Rect(-0.15, -0.15, 1.3, 1.3 / aspectRatio);
+        viewer.viewport.fitBounds(canvasRect, true);
       }).catch(error => {
         console.error(error);
       })
     }
 
-    if (props.api.isVisible) {
+    if (props.api.isVisible)
       renderImages();
-    }
 
     // Otherwise, init when tab first opens
     const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {
@@ -152,7 +157,7 @@ export const Composer = (props: IDockviewPanelProps) => {
       cancelled = true;
       dispose();
     }
-  }, [images.length === 0 ? 'empty' : images.map(i => i.id).join('.'), props.api]);
+  }, [images.length === 0 ? 'empty' : images.map(i => i.id).join('.'), canvasWidth, canvasHeight, props.api]);
 
   useEffect(() => {
     const { dispose } = props.api.onDidVisibilityChange(({ isVisible }) => {

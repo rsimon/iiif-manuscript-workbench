@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Viewer } from 'openseadragon';
 import { HoverLayer } from './hover-layer';
 import { ToolLayer } from './tool-layer';
-import { CanvasIndicator } from './canvas-indicator';
+import { CanvasIndicatorBackground, CanvasIndicatorForeground } from './canvas-indicator';
 
 interface OverlayLayerProps {
 
@@ -82,16 +82,34 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
       <svg
         ref={belowSvgRef}
         className="absolute inset-0 size-full pointer-events-none z-0">
+        <defs>
+          <filter
+            id="shadow"
+            filterUnits="objectBoundingBox"
+            primitiveUnits="objectBoundingBox"
+            x="-20%"  y="-20%"
+            width="200%" height="200%">
+            <feDropShadow
+              dx="0.005"
+              dy="0.025"
+              stdDeviation="0.05"
+              floodColor="rgba(0,0,0,0.35)"
+            />
+          </filter>
+        </defs>
+
         <g ref={belowGroupRef} className="pointer-events-auto">
-          <CanvasIndicator />
+          <CanvasIndicatorBackground />
         </g>
       </svg>
 
       {/* Elements ABOVE the OSD image layer */}
       <svg
         ref={aboveSvgRef}
-        className="absolute inset-0 size-full pointer-events-none z-20">
+        className="absolute inset-0 size-full pointer-events-none z-50">
         <g ref={aboveGroupRef} className="pointer-events-auto">
+          <CanvasIndicatorForeground />
+
           <HoverLayer
             viewer={viewer} />
 
