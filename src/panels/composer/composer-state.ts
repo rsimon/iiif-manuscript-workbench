@@ -38,6 +38,8 @@ export interface ComposerState {
 
   updateImage(id: string, updated: DraggableImage): void;
 
+  deleteImage(id: string): void;
+
   reset(): void;
 
   getCanvas(): CozyCanvas | undefined;
@@ -150,6 +152,10 @@ export const useComposerState = create<ComposerState>((set, get) => ({
   updateImage: (id, updated) => set(state => ({
     images: state.images.map(image =>
       image.id === id ? { ...image, ...updated } : image)
+  })),
+
+  deleteImage: id => set(state => ({
+    images: state.images.filter(i => i.id !== id)
   })),
 
   reset: () => set(() => ({

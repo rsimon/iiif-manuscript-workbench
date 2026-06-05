@@ -15,13 +15,14 @@ export const Composer = (props: IDockviewPanelProps) => {
   const updateReconstructionCanvas = useWorkspaceStore(state => state.updateReconstructionCanvas);
   const composerActiveCanvasId = useWorkspaceStore(state => state.composerActiveCanvasId);
 
-  const getCanvas = useComposerState(state => state.getCanvas);
-  const setSaving= useComposerState(state => state.setSaving);
-
   const viewer = useComposerState(state => state.viewer);
   const images = useComposerState(state => state.images);
   const canvasWidth = useComposerState(state => state.canvasWidth);
   const canvasHeight = useComposerState(state => state.canvasHeight);
+
+  const getCanvas = useComposerState(state => state.getCanvas);
+  const deleteImage = useComposerState(state => state.deleteImage);
+  const setSaving= useComposerState(state => state.setSaving);
 
   const imagesRef = useRef(images);
 
@@ -194,6 +195,15 @@ export const Composer = (props: IDockviewPanelProps) => {
     });
   }
 
+  const onDeleteImage = (id: string) => {
+    setSaving(true);
+
+    deleteImage(id);
+    setTimeout(() => {
+      onSaveCanvas();
+    }, 100);
+  }
+
   return (
     <div className="flex h-full w-full flex-col">
       <div className="relative flex-1">
@@ -206,7 +216,8 @@ export const Composer = (props: IDockviewPanelProps) => {
         </div>
 
         {composerActiveCanvasId ? (
-          <Toolbar />
+          <Toolbar 
+            onDeleteImage={onDeleteImage} />
         ): (
           <div className="absolute bg-white inset-0 flex size-full items-center justify-center p-4">
             <div className="text-center flex flex-col gap-3">

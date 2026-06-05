@@ -12,7 +12,7 @@ export const CanvasIndicatorBackground = () => {
       y={0}
       width={1}
       height={aspectRatio}
-      fill="oklch(97% 0 0)" // neutral-100
+      fill="#fff"
       fillOpacity={0.9}
       filter="url(#shadow)"
       strokeWidth={0}
@@ -34,7 +34,7 @@ export const CanvasIndicatorForeground = () => {
       width={1}
       height={aspectRatio}
       fill="transparent"
-      stroke="oklch(26.9% 0 0)" // neutral-800
+      stroke="oklch(55.6% 0 0)" // neutral-500
       strokeWidth={1}
       strokeOpacity={1}
       vectorEffect="non-scaling-stroke"

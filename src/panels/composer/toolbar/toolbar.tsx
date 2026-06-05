@@ -14,7 +14,13 @@ import {
   Undo2 
 } from 'lucide-react';
 
-export const Toolbar = () => {
+interface ToolbarProps {
+
+  onDeleteImage(id: string): void;
+
+}
+
+export const Toolbar = (props: ToolbarProps) => {
 
   const selectedId = useComposerState(state => state.selectedId);
   const saving = useComposerState(state => state.saving);
@@ -36,7 +42,8 @@ export const Toolbar = () => {
             render={
               <Button
                 disabled={!selectedId}
-                variant="ghost">
+                variant="ghost"
+                onClick={() => props.onDeleteImage(selectedId!)}>
                 <Trash2 className="size-4" />
               </Button>
             }/>
