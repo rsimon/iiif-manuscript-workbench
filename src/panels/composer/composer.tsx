@@ -83,12 +83,11 @@ export const Composer = (props: IDockviewPanelProps) => {
 
   useEffect(() => {
     if (!composerActiveCanvasId || !activeCanvasLabel) return;
+    setCanvasLabel(activeCanvasLabel);
 
     props.api.updateParameters({ 
-      tabTitle: `Canvas Composer [${activeCanvasLabel || 'Untitled Canvas'}]`
+      tabTitle: `Canvas Composer [${activeCanvasLabel|| 'Untitled Canvas'}]`
     });
-
-    setCanvasLabel(activeCanvasLabel);
   }, [activeCanvasLabel]);
 
   useEffect(() => {

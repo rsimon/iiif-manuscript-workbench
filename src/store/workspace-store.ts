@@ -221,7 +221,7 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
       },
 
       removeCanvasFromReconstruction: (canvasId) => {
-        const { project, selection } = get();
+        const { project, selection, composerActiveCanvasId } = get();
         if (!project) return;
         
         const newReconstruction = project.reconstruction
@@ -234,6 +234,7 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
             reconstruction: newReconstruction
           },
           selection: selection?.reconstructionCanvasId === canvasId ? null : selection,
+          composerActiveCanvasId: composerActiveCanvasId === canvasId ? undefined : composerActiveCanvasId
         });
       },
 
