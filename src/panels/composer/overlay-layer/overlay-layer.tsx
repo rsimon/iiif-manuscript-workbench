@@ -42,6 +42,8 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
       const scaleX = containerSizeRef.current.x / bounds.width;
       const scaleY = containerSizeRef.current.y / bounds.height;
 
+      if (isNaN(scaleX) || isNaN(scaleY)) return;
+      
       const transform = 
         `scale(${scaleX}, ${scaleY}) translate(${-bounds.x}, ${-bounds.y})`;
 

@@ -13,7 +13,14 @@ export const Composer = (props: IDockviewPanelProps) => {
 
   const project = useWorkspaceStore(state => state.project);
   const updateReconstructionCanvas = useWorkspaceStore(state => state.updateReconstructionCanvas);
+
   const composerActiveCanvasId = useWorkspaceStore(state => state.composerActiveCanvasId);
+  const activeCanvasLabel = useWorkspaceStore(state => 
+    state.project?.reconstruction.find(rc => rc.id === state.composerActiveCanvasId)?.canvas.getLabel()
+  );
+
+  const dirty = useComposerState(state => state.dirty);
+  const setDirty = useComposerState(state => state.setDirty);
 
   const viewer = useComposerState(state => state.viewer);
   const images = useComposerState(state => state.images);
@@ -22,6 +29,7 @@ export const Composer = (props: IDockviewPanelProps) => {
 
   const getCanvas = useComposerState(state => state.getCanvas);
   const deleteImage = useComposerState(state => state.deleteImage);
+  const setCanvasLabel = useComposerState(state => state.setCanvasLabel);
   const setSaving= useComposerState(state => state.setSaving);
 
   const imagesRef = useRef(images);
@@ -72,6 +80,16 @@ export const Composer = (props: IDockviewPanelProps) => {
   useEffect(() => {
     imagesRef.current = images;
   }, [images]);
+
+  useEffect(() => {
+    if (!composerActiveCanvasId || !activeCanvasLabel) return;
+
+    props.api.updateParameters({ 
+      tabTitle: `Canvas Composer [${activeCanvasLabel || 'Untitled Canvas'}]`
+    });
+
+    setCanvasLabel(activeCanvasLabel);
+  }, [activeCanvasLabel]);
 
   useEffect(() => {
     if (composerActiveCanvasId) {
@@ -148,6 +166,11 @@ export const Composer = (props: IDockviewPanelProps) => {
         resolvedSources.forEach(i => viewer.addTiledImage(i));
 
         fitHome(viewer);
+
+        setTimeout(() => {
+          if (images.length > 0)
+            onSaveCanvas();
+        }, 100);
       }).catch(error => {
         console.error(error);
       })
@@ -189,7 +212,7 @@ export const Composer = (props: IDockviewPanelProps) => {
   }, []);
 
   const onSaveCanvas = () => {
-    if (!composerActiveCanvasId) return;
+    if (!composerActiveCanvasId || !dirty) return;
 
     setSaving(true);
 
@@ -197,18 +220,10 @@ export const Composer = (props: IDockviewPanelProps) => {
       const canvas = getCanvas();
       if (!canvas) return;
       updateReconstructionCanvas(composerActiveCanvasId, canvas);
+      setDirty(false);
 
       setTimeout(() => setSaving(false), 500);
     });
-  }
-
-  const onDeleteImage = (id: string) => {
-    setSaving(true);
-
-    deleteImage(id);
-    setTimeout(() => {
-      onSaveCanvas();
-    }, 100);
   }
 
   return (
@@ -224,7 +239,7 @@ export const Composer = (props: IDockviewPanelProps) => {
 
         {composerActiveCanvasId ? (
           <Toolbar 
-            onDeleteImage={onDeleteImage} />
+            onDeleteImage={deleteImage} />
         ): (
           <div className="absolute bg-white inset-0 flex size-full items-center justify-center p-4">
             <div className="text-center flex flex-col gap-3">

@@ -18,6 +18,8 @@ export interface ComposerState {
 
   images: DraggableImage[];
 
+  canvasLabel: string;
+
   canvasWidth: number;
 
   canvasHeight: number;
@@ -25,6 +27,8 @@ export interface ComposerState {
   hoveredId: string | null;
 
   selectedId: string | null;
+
+  dirty: boolean;
 
   saving: boolean;
 
@@ -44,6 +48,10 @@ export interface ComposerState {
 
   getCanvas(): CozyCanvas | undefined;
 
+  setCanvasLabel(label: string): void;
+
+  setDirty(dirty: boolean): void;
+
   setSaving(saving: boolean): void;
 
 }
@@ -61,6 +69,10 @@ export const useComposerState = create<ComposerState>((set, get) => ({
   canvasWidth: 0,
 
   canvasHeight: 0,
+
+  canvasLabel: 'Canvas',
+
+  dirty: false,
 
   saving: false,
 
@@ -91,26 +103,29 @@ export const useComposerState = create<ComposerState>((set, get) => ({
       }
     });
 
-    if (images.length === 0 || clearOthers) {
+    if (clearOthers) {
       // Initialize canvas dimensions with the size of this canvas
       set(state => ({
         canvasWidth: canvas.width,
         canvasHeight: canvas.height,
+        canvasLabel: canvas.getLabel(),
         images: clearOthers ? toAdd : [...state.images, ...toAdd],
         selectedId: null,
-        hoveredId: null
+        hoveredId: null,
+        dirty: false
       }));
     } else {
       set(state => ({
         images: [...state.images, ...toAdd],
         selectedId: null,
-        hoveredId: null
+        hoveredId: null,
+        dirty: true
       }));
     }
   },
 
   getCanvas: () => {
-    const { images, viewer, canvasWidth, canvasHeight } = get();
+    const { images, viewer, canvasWidth, canvasHeight, canvasLabel } = get();
     if (!viewer) return;
 
     const world = createCanvasWorld(viewer, images, canvasWidth, canvasHeight);
@@ -120,7 +135,7 @@ export const useComposerState = create<ComposerState>((set, get) => ({
     const canvas = {
       id: canvasId,
       type: 'Canvas',
-      label: { en: ['Canvas'] },
+      label: { en: [ canvasLabel ] },
       width: world.width,
       height: world.height,
       items: [{
@@ -151,20 +166,27 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   updateImage: (id, updated) => set(state => ({
     images: state.images.map(image =>
-      image.id === id ? { ...image, ...updated } : image)
+      image.id === id ? { ...image, ...updated } : image),
+    dirty: true
   })),
 
   deleteImage: id => set(state => ({
-    images: state.images.filter(i => i.id !== id)
+    images: state.images.filter(i => i.id !== id),
+    dirty: true
   })),
 
   reset: () => set(() => ({
     images: [],
     canvasWidth: 0,
     canvasHeight: 0,
+    canvasLabel: '',
     hoveredId: null,
     selectedId: null
   })),
+
+  setCanvasLabel: canvasLabel => set(() => ({ canvasLabel })),
+
+  setDirty: dirty => set(() => ({ dirty })),
 
   setSaving: saving => set(() => ({ saving }))
 
