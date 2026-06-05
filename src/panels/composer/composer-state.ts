@@ -8,6 +8,10 @@ import { getReconstructionID } from '@/store';
 
 const BASE_ID = `${getReconstructionID()}/canvas`;
 
+const DEFAULT_SIZE = 0.4;
+
+const DEFAULT_STEP = 0.05; // rightward/downward shift per stacked image
+
 export interface ComposerState {
 
   viewer?: Viewer;
@@ -62,11 +66,14 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   addCanvas: (canvas, clearOthers) => {
     const { images } = get();
-    
+
+    const defaultSize = clearOthers ? 1 : DEFAULT_SIZE;
+    const defaultOffset = clearOthers ? 0 : DEFAULT_STEP * images.length;
+
     const toAdd: DraggableImage[] = canvas.images.map((image, idx) => {
-      const x = image.target ? image.target.x / canvas!.width : 0;
-      const y = image.target ? image.target.y / canvas!.width : 0;
-      const width = image.target ? image.target.w / canvas!.width : 1;
+      const x = image.target ? image.target.x / canvas!.width : defaultOffset;
+      const y = image.target ? image.target.y / canvas!.width : defaultOffset;
+      const width = image.target ? image.target.w / canvas!.width : defaultSize;
 
       return {
         id: crypto.randomUUID(),
