@@ -96,6 +96,12 @@ export const Composer = (props: IDockviewPanelProps) => {
   useEffect(() => {
     let cancelled = false;
 
+    const fitHome = (viewer: Viewer) => {
+      const aspectRatio = canvasWidth / canvasHeight;
+      const canvasRect = new OpenSeadragon.Rect(-0.15, -0.12, 1.3, 1.3 / aspectRatio);
+      viewer.viewport.fitBounds(canvasRect, true);
+    }
+
     const renderImages = () => {
       if (!viewerRef.current) return;
       const viewer = viewerRef.current;
@@ -114,6 +120,9 @@ export const Composer = (props: IDockviewPanelProps) => {
           },
           opacity: 0,
         });
+
+        fitHome(viewer);
+
         return;
       }
 
@@ -138,9 +147,7 @@ export const Composer = (props: IDockviewPanelProps) => {
         viewer.world.removeAll();
         resolvedSources.forEach(i => viewer.addTiledImage(i));
 
-        const aspectRatio = canvasWidth / canvasHeight;
-        const canvasRect = new OpenSeadragon.Rect(-0.15, -0.15, 1.3, 1.3 / aspectRatio);
-        viewer.viewport.fitBounds(canvasRect, true);
+        fitHome(viewer);
       }).catch(error => {
         console.error(error);
       })
