@@ -4,6 +4,7 @@ import { Cozy, type CozyCanvas, type CozyManifest } from 'cozy-iiif';
 import { hydrateCanvas } from 'cozy-iiif/helpers';
 import type { Project, ReconstructionCanvas, Selection, SourceManifest } from '@/types';
 import { getReconstructionID } from './get-reconstruction-id';
+import { getEmptyCanvasLabel } from './get-empty-canvas-label';
 
 interface WorkspaceStore {
   
@@ -176,7 +177,7 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
               id,
               type: 'Canvas',
               label: {
-                en: ['Empty Canvas']
+                en: [ getEmptyCanvasLabel(project) ]
               },
               width,
               height
