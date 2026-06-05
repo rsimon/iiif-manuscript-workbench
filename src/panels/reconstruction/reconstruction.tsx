@@ -152,9 +152,12 @@ export const Reconstruction = () => {
                     />
                   ))}
                   
-                  <div className="flex h-24 w-20 shrink-0 items-center justify-center rounded border-2 border-dashed border-panel-border text-neutral-400/60 transition-colors hover:border-primary/50 hover:text-primary/50">
+                  <button className="flex h-24 w-20 shrink-0 items-center justify-center rounded border-2 
+                    border-dashed border-panel-border text-neutral-400/60 transition-colors hover:border-primary/50 
+                    hover:text-primary/50"
+                    onClick={() => createEmptyCanvas()}>
                     <Plus className="h-5 w-5" />
-                  </div>
+                  </button>
                 </div>
               </SortableContext>
               

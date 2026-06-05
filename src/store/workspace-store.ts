@@ -175,6 +175,9 @@ export const useWorkspaceStore = create<WorkspaceStore>()(
             source: {
               id,
               type: 'Canvas',
+              label: {
+                en: ['Empty Canvas']
+              },
               width,
               height
             }
