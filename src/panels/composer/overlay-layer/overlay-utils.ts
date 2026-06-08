@@ -9,11 +9,10 @@ export const resolveId = (
   if (typeof imageOrId === 'string') return imageOrId;
 
   const source = imageOrId.source as Record<string, any>;
-
   return images.find(img => {
     if (typeof img.tileSource === 'string') {
       // WARNING! Extremely brittle hack!
-      const id = source['@id'] || source.id;
+      const id = source.id || source['@id'];
       return img.tileSource.startsWith(decodeURIComponent(id));
     } else {
       return Object.entries(img.tileSource).every(([key, value]) =>

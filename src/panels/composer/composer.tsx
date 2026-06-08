@@ -148,7 +148,7 @@ export const Composer = (props: IDockviewPanelProps) => {
           return fetch(i.tileSource).then(res => res.json()).then(tileSource => {    
             return {
               ...i,
-              tileSource
+              tileSource: {...tileSource, id: i.tileSource }
             }
           });
         } else {
