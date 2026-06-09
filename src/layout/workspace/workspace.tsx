@@ -51,29 +51,31 @@ export const Workspace = () => {
     });
 
     event.api.addPanel({
-      id: 'reconstruction',
-      component: 'reconstruction',
-      position: { referencePanel: 'source_browser', direction: 'right' },
-      initialWidth: event.api.width * 0.8
+      id: 'inspector',
+      component: 'inspector',
+      position: { referencePanel: 'source_browser', direction: 'right'},
+      initialWidth: event.api.width * 0.75
     });
 
     event.api.addPanel({
       id: 'composer',
       component: 'composer',
-      inactive: true
+      position: { referencePanel: 'source_browser', direction: 'right' },
+      initialWidth: event.api.width * 0.55
     });
 
     event.api.addPanel({
-      id: 'inspector',
-      component: 'inspector',
-      position: { referencePanel: 'reconstruction', direction: 'right'},
-      initialWidth: event.api.width * 0.2
+      id: 'reconstruction',
+      component: 'reconstruction',
+      position: { referencePanel: 'composer', direction: 'below' },
+      initialHeight: event.api.height * 0.35
     });
 
     event.api.addPanel({
       id: 'preview',
       component: 'preview',
-      position: { referencePanel: 'inspector', direction: 'below'}
+      position: { referencePanel: 'inspector', direction: 'below'},
+      initialWidth: event.api.width * 0.2
     });
   }
 
