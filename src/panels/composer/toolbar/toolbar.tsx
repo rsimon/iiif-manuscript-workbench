@@ -1,7 +1,7 @@
 import { Button } from '@/shadcn/button';
+import { Separator } from '@/shadcn/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shadcn/tooltip';
 import { useComposerState } from '../composer-state';
-import { Separator } from '@/shadcn/separator';
 import { 
   ArrowDownNarrowWide, 
   ArrowUpNarrowWide, 
@@ -10,6 +10,7 @@ import {
   LockKeyhole, 
   Maximize, 
   Redo2, 
+  RulerDimensionLine, 
   Trash2, 
   Undo2 
 } from 'lucide-react';
@@ -17,6 +18,8 @@ import {
 interface ToolbarProps {
 
   onDeleteImage(id: string): void;
+
+  onToggleMeasurementPanel(): void;
 
 }
 
@@ -34,6 +37,17 @@ export const Toolbar = (props: ToolbarProps) => {
         <div className="text-[11px] font-mono text-muted-foreground py-1 px-2">
           {canvasWidth.toLocaleString()} x {canvasHeight.toLocaleString()}
         </div>
+
+        <Tooltip>
+          <TooltipTrigger 
+            render={
+              <Button
+                variant="ghost"
+                onClick={() => props.onToggleMeasurementPanel()}>
+                <RulerDimensionLine className="size-4" />
+              </Button>
+            } />
+        </Tooltip>
 
         <Separator orientation="vertical" />
 
