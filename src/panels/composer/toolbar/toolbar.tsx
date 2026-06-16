@@ -19,13 +19,15 @@ interface ToolbarProps {
 
   onDeleteImage(id: string): void;
 
-  onToggleMeasurementPanel(): void;
-
 }
 
 export const Toolbar = (props: ToolbarProps) => {
 
   const selectedId = useComposerState(state => state.selectedId);
+
+  const isMeasurementEnabled = useComposerState(state => state.isMeasurementEnabled);
+  const setMeasurementEnabled = useComposerState(state => state.setMeasurementEnabled);
+
   const saving = useComposerState(state => state.saving);
 
   const canvasWidth = useComposerState(state => state.canvasWidth);
@@ -43,7 +45,7 @@ export const Toolbar = (props: ToolbarProps) => {
             render={
               <Button
                 variant="ghost"
-                onClick={() => props.onToggleMeasurementPanel()}>
+                onClick={() => setMeasurementEnabled(!isMeasurementEnabled)}>
                 <RulerDimensionLine className="size-4" />
               </Button>
             } />

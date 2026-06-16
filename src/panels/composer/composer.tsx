@@ -241,8 +241,7 @@ export const Composer = (props: IDockviewPanelProps) => {
           </div>
 
           {composerActiveCanvasId ? (
-            <Toolbar 
-              onToggleMeasurementPanel={() => setShowMeasurementPanel(open => !open)}
+            <Toolbar
               onDeleteImage={deleteImage} />
           ): (
             <div className="absolute bg-white inset-0 flex size-full items-center justify-center p-4">

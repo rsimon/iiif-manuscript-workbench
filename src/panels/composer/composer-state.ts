@@ -28,6 +28,8 @@ export interface ComposerState {
 
   selectedId: string | null;
 
+  isMeasurementEnabled: boolean;
+
   dirty: boolean;
 
   saving: boolean;
@@ -39,6 +41,8 @@ export interface ComposerState {
   setHoveredId(id?: string | null): void;
 
   setSelectedId(id?: string | null): void;
+
+  setMeasurementEnabled(enabled: boolean): void;
 
   updateImage(id: string, updated: DraggableImage): void;
 
@@ -65,6 +69,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
   hoveredId: null,
 
   selectedId: null,
+
+  isMeasurementEnabled: false,
 
   canvasWidth: 0,
 
@@ -162,6 +168,10 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   setSelectedId: id => set(() => ({
     selectedId: id || null,
+  })),
+
+  setMeasurementEnabled: enabled => set(() => ({
+    isMeasurementEnabled: enabled
   })),
 
   updateImage: (id, updated) => set(state => ({

@@ -3,6 +3,7 @@ import { Viewer } from 'openseadragon';
 import { HoverLayer } from './hover-layer';
 import { ToolLayer } from './tool-layer';
 import { CanvasIndicatorBackground, CanvasIndicatorForeground } from './canvas-indicator';
+import { MeasurementLayer } from './measurement-tool';
 
 interface OverlayLayerProps {
 
@@ -118,6 +119,9 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
           <ToolLayer 
             viewer={viewer} 
             onCanvasUpdated={props.onCanvasUpdated} />
+
+          <MeasurementLayer 
+            viewer={viewer} />
         </g>
       </svg>
     </>
