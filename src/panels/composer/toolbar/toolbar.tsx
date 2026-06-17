@@ -14,6 +14,7 @@ import {
   Trash2, 
   Undo2 
 } from 'lucide-react';
+import { Toggle } from '@/shadcn/toggle';
 
 interface ToolbarProps {
 
@@ -43,11 +44,12 @@ export const Toolbar = (props: ToolbarProps) => {
         <Tooltip>
           <TooltipTrigger 
             render={
-              <Button
-                variant="ghost"
-                onClick={() => setMeasurementEnabled(!isMeasurementEnabled)}>
+              <Toggle
+                pressed={isMeasurementEnabled}
+                onPressedChange={setMeasurementEnabled}
+                className="data-pressed:bg-black data-pressed:text-white">
                 <RulerDimensionLine className="size-4" />
-              </Button>
+              </Toggle>
             } />
         </Tooltip>
 
