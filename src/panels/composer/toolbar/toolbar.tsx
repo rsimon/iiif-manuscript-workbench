@@ -51,6 +51,9 @@ export const Toolbar = (props: ToolbarProps) => {
                 <RulerDimensionLine className="size-4" />
               </Toggle>
             } />
+            <TooltipContent>
+              Tape measure
+            </TooltipContent>
         </Tooltip>
 
         <Separator orientation="vertical" />
