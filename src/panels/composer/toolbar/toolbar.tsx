@@ -1,7 +1,8 @@
 import { Button } from '@/shadcn/button';
+import { Separator } from '@/shadcn/separator';
+import { Toggle } from '@/shadcn/toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shadcn/tooltip';
 import { useComposerState } from '../composer-state';
-import { Separator } from '@/shadcn/separator';
 import { 
   ArrowDownNarrowWide, 
   ArrowUpNarrowWide, 
@@ -10,6 +11,7 @@ import {
   LockKeyhole, 
   Maximize, 
   Redo2, 
+  RulerDimensionLine, 
   Trash2, 
   Undo2 
 } from 'lucide-react';
@@ -23,6 +25,10 @@ interface ToolbarProps {
 export const Toolbar = (props: ToolbarProps) => {
 
   const selectedId = useComposerState(state => state.selectedId);
+
+  const isMeasurementEnabled = useComposerState(state => state.isMeasurementEnabled);
+  const setMeasurementEnabled = useComposerState(state => state.setMeasurementEnabled);
+
   const saving = useComposerState(state => state.saving);
 
   const canvasWidth = useComposerState(state => state.canvasWidth);
@@ -34,6 +40,18 @@ export const Toolbar = (props: ToolbarProps) => {
         <div className="text-[11px] font-mono text-muted-foreground py-1 px-2">
           {canvasWidth.toLocaleString()} x {canvasHeight.toLocaleString()}
         </div>
+
+        <Tooltip>
+          <TooltipTrigger 
+            render={
+              <Toggle
+                pressed={isMeasurementEnabled}
+                onPressedChange={setMeasurementEnabled}
+                className="data-pressed:bg-black data-pressed:text-white">
+                <RulerDimensionLine className="size-4" />
+              </Toggle>
+            } />
+        </Tooltip>
 
         <Separator orientation="vertical" />
 

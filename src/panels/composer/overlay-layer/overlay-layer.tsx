@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Viewer } from 'openseadragon';
+import { useComposerState } from '../composer-state';
 import { HoverLayer } from './hover-layer';
 import { ToolLayer } from './tool-layer';
 import { CanvasIndicatorBackground, CanvasIndicatorForeground } from './canvas-indicator';
+import { MeasurementLayer, MeasurementDialog, MeasurementProvider } from './measurement-tool';
 
 interface OverlayLayerProps {
 
@@ -22,6 +24,9 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
   const aboveGroupRef = useRef<SVGGElement>(null);
 
   const containerSizeRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const isMeasurementEnabled = useComposerState(state => state.isMeasurementEnabled);
+  const setMeasurementEnabled = useComposerState(state => state.setMeasurementEnabled);
 
   useEffect(() => {
     if (
@@ -79,7 +84,7 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
   }, [viewer]);
 
   return viewer ? (
-    <>
+    <MeasurementProvider>
       {/* Elements BELOW the OSD image layer */}
       <svg
         ref={belowSvgRef}
@@ -112,15 +117,27 @@ export const OverlayLayer = (props: OverlayLayerProps) => {
         <g ref={aboveGroupRef} className="pointer-events-auto">
           <CanvasIndicatorForeground />
 
-          <HoverLayer
-            viewer={viewer} />
+          {isMeasurementEnabled ? (
+            <MeasurementLayer 
+              viewer={viewer} />
+          ) : (
+            <>
+              <HoverLayer
+                viewer={viewer} />
 
-          <ToolLayer 
-            viewer={viewer} 
-            onCanvasUpdated={props.onCanvasUpdated} />
+              <ToolLayer 
+                viewer={viewer} 
+                onCanvasUpdated={props.onCanvasUpdated} />
+            </>
+          )}
         </g>
       </svg>
-    </>
+
+      {isMeasurementEnabled && (
+        <MeasurementDialog 
+          onClose={() => setMeasurementEnabled(false)} />
+      )}
+    </MeasurementProvider>
   ) : null;
 
 }

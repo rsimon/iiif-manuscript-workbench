@@ -12,6 +12,7 @@ main .dv-split-view-container {
 
 main .dv-view {
   box-shadow: 0 0 8px -3px rgba(0, 0, 0, 0.2);
+  overflow: visible !important;
 }
 
 main .dv-view.visible::before {
@@ -23,7 +24,7 @@ main .dv-groupview {
   border-radius: 2px;
   color: var(--foreground);
   font-size: var(--text-sm);
-  overflow: visible;
+  overflow: visible !important;
 }
 
 main .dv-tab {

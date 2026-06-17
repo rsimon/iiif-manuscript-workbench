@@ -226,8 +226,8 @@ export const Composer = (props: IDockviewPanelProps) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="relative flex-1">
+    <div className="flex h-full w-full flex-col relative">
+      <div className="flex-1">
         <div 
           ref={containerRef} 
           className="size-full bg-neutral-100 bg-[radial-gradient(#e0e0e0_1px,transparent_1px)] bg-size-[16px_16px] [&>.openseadragon-container]:z-10 shadow-[inset_0_0_80px_-5px_rgba(0,0,0,0.07),inset_0_1px_3px_0_rgba(0,0,0,0.06)]">
@@ -237,7 +237,7 @@ export const Composer = (props: IDockviewPanelProps) => {
         </div>
 
         {composerActiveCanvasId ? (
-          <Toolbar 
+          <Toolbar
             onDeleteImage={deleteImage} />
         ): (
           <div className="absolute bg-white inset-0 flex size-full items-center justify-center p-4">

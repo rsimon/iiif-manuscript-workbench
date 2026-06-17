@@ -24,9 +24,13 @@ export interface ComposerState {
 
   canvasHeight: number;
 
+  canvasScale?: Scale;
+
   hoveredId: string | null;
 
   selectedId: string | null;
+
+  isMeasurementEnabled: boolean;
 
   dirty: boolean;
 
@@ -36,9 +40,13 @@ export interface ComposerState {
 
   addCanvas(canvas: CozyCanvas, clearOthers?: boolean): void;
 
+  setCanvasScale(scale?: Scale): void;
+
   setHoveredId(id?: string | null): void;
 
   setSelectedId(id?: string | null): void;
+
+  setMeasurementEnabled(enabled: boolean): void;
 
   updateImage(id: string, updated: DraggableImage): void;
 
@@ -56,6 +64,8 @@ export interface ComposerState {
 
 }
 
+export type Scale = { factor: number, unit: string };
+
 export const useComposerState = create<ComposerState>((set, get) => ({
 
   viewer: undefined,
@@ -66,9 +76,13 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   selectedId: null,
 
+  isMeasurementEnabled: false,
+
   canvasWidth: 0,
 
   canvasHeight: 0,
+
+  canvasScale: undefined,
 
   canvasLabel: 'Canvas',
 
@@ -155,6 +169,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
     return hydrateCanvas({ source: canvas } as unknown as CozyCanvas);
   },
+
+  setCanvasScale: scale => set(() => ({ canvasScale: scale })),
   
   setHoveredId: id => set(() => ({
     hoveredId: id || null,
@@ -162,6 +178,10 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
   setSelectedId: id => set(() => ({
     selectedId: id || null,
+  })),
+
+  setMeasurementEnabled: enabled => set(() => ({
+    isMeasurementEnabled: enabled
   })),
 
   updateImage: (id, updated) => set(state => ({
