@@ -29,7 +29,6 @@
     "clsx": "^2.1.1",
     "cozy-iiif": "^0.8.2",
     "dockview-react": "^6.6.1",
-    "install": "^0.13.0",
     "lucide-react": "^1.18.0",
     "openseadragon": "^5.0.1",
     "p-throttle": "^8.1.0",
