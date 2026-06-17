@@ -24,6 +24,8 @@ export interface ComposerState {
 
   canvasHeight: number;
 
+  canvasScale?: Scale;
+
   hoveredId: string | null;
 
   selectedId: string | null;
@@ -37,6 +39,8 @@ export interface ComposerState {
   setViewer(viewer?: Viewer): void;
 
   addCanvas(canvas: CozyCanvas, clearOthers?: boolean): void;
+
+  setCanvasScale(scale?: Scale): void;
 
   setHoveredId(id?: string | null): void;
 
@@ -60,6 +64,8 @@ export interface ComposerState {
 
 }
 
+export type Scale = { factor: number, unit: string };
+
 export const useComposerState = create<ComposerState>((set, get) => ({
 
   viewer: undefined,
@@ -75,6 +81,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
   canvasWidth: 0,
 
   canvasHeight: 0,
+
+  canvasScale: undefined,
 
   canvasLabel: 'Canvas',
 
@@ -161,6 +169,8 @@ export const useComposerState = create<ComposerState>((set, get) => ({
 
     return hydrateCanvas({ source: canvas } as unknown as CozyCanvas);
   },
+
+  setCanvasScale: scale => set(() => ({ canvasScale: scale })),
   
   setHoveredId: id => set(() => ({
     hoveredId: id || null,

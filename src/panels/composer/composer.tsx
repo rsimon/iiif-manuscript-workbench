@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Puzzle } from 'lucide-react';
 import type { IDockviewPanelProps } from 'dockview-react';
 import OpenSeadragon, { type Viewer } from 'openseadragon';
@@ -6,7 +6,6 @@ import { useWorkspaceStore } from '@/store';
 import { useComposerState } from './composer-state';
 import { OverlayLayer } from './overlay-layer';
 import { Toolbar } from './toolbar';
-import { MeasurementDialog } from './measurement';
 
 export const Composer = (props: IDockviewPanelProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -38,8 +37,6 @@ export const Composer = (props: IDockviewPanelProps) => {
   const setViewer = useComposerState(state => state.setViewer);
   const addCanvas = useComposerState(state => state.addCanvas);
   const reset = useComposerState(state => state.reset);
-
-  const [showMeasurementPanel, setShowMeasurementPanel] = useState(false);
 
   useEffect(() => {
     // Dockview mounts the composer panel during init, but keeps it hidden.
@@ -255,11 +252,6 @@ export const Composer = (props: IDockviewPanelProps) => {
           )}
         </div>
       </div>
-    
-      {showMeasurementPanel && (
-        <MeasurementDialog 
-          onClose={() => setShowMeasurementPanel(false)} />
-      )}
     </>
   )
 
