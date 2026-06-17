@@ -1,5 +1,6 @@
 import { Button } from '@/shadcn/button';
 import { Separator } from '@/shadcn/separator';
+import { Toggle } from '@/shadcn/toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shadcn/tooltip';
 import { useComposerState } from '../composer-state';
 import { 
@@ -14,7 +15,6 @@ import {
   Trash2, 
   Undo2 
 } from 'lucide-react';
-import { Toggle } from '@/shadcn/toggle';
 
 interface ToolbarProps {
 
