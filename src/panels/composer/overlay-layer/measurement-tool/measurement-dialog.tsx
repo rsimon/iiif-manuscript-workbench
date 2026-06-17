@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useDraggable } from '@neodrag/react';
-import { X } from 'lucide-react';
+import { RulerDimensionLine, X } from 'lucide-react';
 import { useComposerState } from '../../composer-state';
 import { useMeasurement } from './measurement-context';
 import { Button } from '@/shadcn/button';
@@ -22,7 +22,7 @@ export const MeasurementDialog = (props: MeasurementDialogProps) => {
   const setCanvasScale = useComposerState(state => state.setCanvasScale);
 
   // Current state for the line drawing tool
-  const { measurement } = useMeasurement();
+  const { measurement, setMeasurement } = useMeasurement();
   
   const hasLine = measurement.phase === 'committed' || measurement.phase === 'dragging';
   const viewportDistance = hasLine ? Math.round(10000 * measurement.viewportDistance) / 10000 : 0;
@@ -39,6 +39,15 @@ export const MeasurementDialog = (props: MeasurementDialogProps) => {
     && physicalDistanceNum > 0
     && unit.trim().length > 0;
 
+  const onSetCanvasScale = () => {
+    setCanvasScale({ 
+      factor: viewportDistance / physicalDistanceNum,
+      unit: unit
+    });
+
+    setMeasurement({ phase: 'idle' });
+  }
+
   const onResetScale = () => {
     setPhysicalReferenceDistance('');
     setCanvasScale(undefined)
@@ -53,7 +62,10 @@ export const MeasurementDialog = (props: MeasurementDialogProps) => {
         ${isDragging ? 'cursor-grabbing select-none' : ''}`}>
 
       <div className="flex items-center justify-between p-1 pl-2 border-b bg-muted cursor-grab">
-        <span className="text-[13px] font-medium">Measure</span>
+        <span className="text-[13px] font-medium flex gap-1.5 items-center">
+          <RulerDimensionLine className="size-4" /> Tape Measure
+        </span>
+
         <button
           onClick={props.onClose}
           className="rounded p-1.5 hover:bg-accent text-muted-foreground hover:text-foreground transition-colors">
@@ -64,13 +76,13 @@ export const MeasurementDialog = (props: MeasurementDialogProps) => {
       <div className="p-4 text-sm space-y-4">
         {canvasScale ? (
           <div className="space-y-1">
-            <p className="font-medium text-foreground">Distance</p>
+            <p className="font-medium text-xs text-foreground">Distance</p>
             {hasLine ? (
               <p className="text-2xl font-semibold tracking-tight">
-                {Math.round(1000 * measurement.viewportDistance! / canvasScale.factor) / 1000} <span className="text-base font-normal text-muted-foreground">{canvasScale.unit}</span>
+                {Math.ceil(1000 * measurement.viewportDistance! / canvasScale.factor) / 1000} <span className="text-base font-normal text-muted-foreground">{canvasScale.unit}</span>
               </p>
             ) : (
-              <p className="text-muted-foreground italic">Draw a line to measure</p>
+              <p className="text-muted-foreground text-xl">Draw line to measure</p>
             )}
             <p className="text-xs text-muted-foreground">Scale: 1 unit = {Math.round(10000 * canvasScale.factor) / 10000} {canvasScale.unit}</p>
           </div>
@@ -78,11 +90,10 @@ export const MeasurementDialog = (props: MeasurementDialogProps) => {
           <div className="space-y-1">
             <p className="font-medium text-foreground">No scale set</p>
             <p className="text-muted-foreground text-xs leading-relaxed">
-              Draw a line over a known distance — such as a scale bar or ruler
-              visible in the image — to calibrate measurements for this canvas.
+              Click two points over a known distance (such as a scale bar or ruler
+              visible in the image) to calibrate measurements.
             </p>
           </div>
-
         )}
 
         {canvasScale ? (
@@ -122,10 +133,7 @@ export const MeasurementDialog = (props: MeasurementDialogProps) => {
               <Button 
                 disabled={!canSetScale}
                 className="w-full"
-                onClick={() => setCanvasScale({ 
-                  factor: viewportDistance / physicalDistanceNum,
-                  unit: unit
-                })}>
+                onClick={onSetCanvasScale}>
                 Set Scale
               </Button>
             </div>
